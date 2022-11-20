@@ -22,15 +22,15 @@
 QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
-struct qt_meta_stringdata_Set_t {
+struct qt_meta_stringdata_SET_t {
     const uint offsetsAndSize[16];
     char stringdata0[133];
 };
 #define QT_MOC_LITERAL(ofs, len) \
-    uint(offsetof(qt_meta_stringdata_Set_t, stringdata0) + ofs), len 
-static const qt_meta_stringdata_Set_t qt_meta_stringdata_Set = {
+    uint(offsetof(qt_meta_stringdata_SET_t, stringdata0) + ofs), len 
+static const qt_meta_stringdata_SET_t qt_meta_stringdata_SET = {
     {
-QT_MOC_LITERAL(0, 3), // "Set"
+QT_MOC_LITERAL(0, 3), // "SET"
 QT_MOC_LITERAL(4, 28), // "on_Select_Background_clicked"
 QT_MOC_LITERAL(33, 0), // ""
 QT_MOC_LITERAL(34, 19), // "on_Open_Dir_clicked"
@@ -40,14 +40,14 @@ QT_MOC_LITERAL(100, 15), // "on_Open_clicked"
 QT_MOC_LITERAL(116, 16) // "on_Close_clicked"
 
     },
-    "Set\0on_Select_Background_clicked\0\0"
+    "SET\0on_Select_Background_clicked\0\0"
     "on_Open_Dir_clicked\0on_Log_Pushbutton_clicked\0"
     "on_Exit_Log_clicked\0on_Open_clicked\0"
     "on_Close_clicked"
 };
 #undef QT_MOC_LITERAL
 
-static const uint qt_meta_data_Set[] = {
+static const uint qt_meta_data_SET[] = {
 
  // content:
       10,       // revision
@@ -79,10 +79,10 @@ static const uint qt_meta_data_Set[] = {
        0        // eod
 };
 
-void Set::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
+void SET::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
 {
     if (_c == QMetaObject::InvokeMetaMethod) {
-        auto *_t = static_cast<Set *>(_o);
+        auto *_t = static_cast<SET *>(_o);
         (void)_t;
         switch (_id) {
         case 0: _t->on_Select_Background_clicked(); break;
@@ -97,14 +97,14 @@ void Set::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **
     (void)_a;
 }
 
-const QMetaObject Set::staticMetaObject = { {
+const QMetaObject SET::staticMetaObject = { {
     QMetaObject::SuperData::link<QMainWindow::staticMetaObject>(),
-    qt_meta_stringdata_Set.offsetsAndSize,
-    qt_meta_data_Set,
+    qt_meta_stringdata_SET.offsetsAndSize,
+    qt_meta_data_SET,
     qt_static_metacall,
     nullptr,
-qt_incomplete_metaTypeArray<qt_meta_stringdata_Set_t
-, QtPrivate::TypeAndForceComplete<Set, std::true_type>
+qt_incomplete_metaTypeArray<qt_meta_stringdata_SET_t
+, QtPrivate::TypeAndForceComplete<SET, std::true_type>
 , QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>
 
 
@@ -113,20 +113,20 @@ qt_incomplete_metaTypeArray<qt_meta_stringdata_Set_t
 } };
 
 
-const QMetaObject *Set::metaObject() const
+const QMetaObject *SET::metaObject() const
 {
     return QObject::d_ptr->metaObject ? QObject::d_ptr->dynamicMetaObject() : &staticMetaObject;
 }
 
-void *Set::qt_metacast(const char *_clname)
+void *SET::qt_metacast(const char *_clname)
 {
     if (!_clname) return nullptr;
-    if (!strcmp(_clname, qt_meta_stringdata_Set.stringdata0))
+    if (!strcmp(_clname, qt_meta_stringdata_SET.stringdata0))
         return static_cast<void*>(this);
     return QMainWindow::qt_metacast(_clname);
 }
 
-int Set::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
+int SET::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 {
     _id = QMainWindow::qt_metacall(_c, _id, _a);
     if (_id < 0)

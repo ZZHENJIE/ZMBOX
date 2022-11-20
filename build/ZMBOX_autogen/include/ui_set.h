@@ -48,12 +48,14 @@ public:
     QWidget *Not_Log;
     QPushButton *Log_Pushbutton;
     QLineEdit *Input_Number;
+    QLabel *About;
 
     void setupUi(QMainWindow *Set)
     {
         if (Set->objectName().isEmpty())
             Set->setObjectName(QString::fromUtf8("Set"));
         Set->resize(400, 500);
+        Set->setStyleSheet(QString::fromUtf8(""));
         Main = new QWidget(Set);
         Main->setObjectName(QString::fromUtf8("Main"));
         horizontalLayoutWidget = new QWidget(Main);
@@ -85,6 +87,7 @@ public:
         Background_Image = new QLabel(horizontalLayoutWidget);
         Background_Image->setObjectName(QString::fromUtf8("Background_Image"));
         Background_Image->setMaximumSize(QSize(80, 45));
+        Background_Image->setScaledContents(true);
 
         SetBackground->addWidget(Background_Image);
 
@@ -171,13 +174,20 @@ public:
         Not_Log->setGeometry(QRect(0, 160, 400, 190));
         Log_Pushbutton = new QPushButton(Not_Log);
         Log_Pushbutton->setObjectName(QString::fromUtf8("Log_Pushbutton"));
-        Log_Pushbutton->setGeometry(QRect(0, 130, 400, 35));
+        Log_Pushbutton->setGeometry(QRect(5, 130, 390, 35));
         Log_Pushbutton->setFont(font3);
         Input_Number = new QLineEdit(Not_Log);
         Input_Number->setObjectName(QString::fromUtf8("Input_Number"));
-        Input_Number->setGeometry(QRect(0, 40, 400, 40));
+        Input_Number->setGeometry(QRect(5, 40, 390, 40));
         Input_Number->setFont(font3);
         Input_Number->setMaxLength(20);
+        About = new QLabel(Main);
+        About->setObjectName(QString::fromUtf8("About"));
+        About->setGeometry(QRect(0, 365, 400, 130));
+        QFont font4;
+        font4.setFamilies({QString::fromUtf8("\345\276\256\350\275\257\351\233\205\351\273\221")});
+        font4.setPointSize(8);
+        About->setFont(font4);
         Set->setCentralWidget(Main);
 
         retranslateUi(Set);
@@ -201,6 +211,8 @@ public:
         Exit_Log->setText(QCoreApplication::translate("Set", "\351\200\200\345\207\272", nullptr));
         Log_Pushbutton->setText(QCoreApplication::translate("Set", "\347\231\273\345\205\245", nullptr));
         Input_Number->setPlaceholderText(QCoreApplication::translate("Set", "\350\257\267\350\276\223\345\205\245QQ\345\217\267", nullptr));
+        About->setText(QCoreApplication::translate("Set", "<html><head/><body><p align=\"center\"><span style=\" font-size:8pt; font-weight:700;\">\347\211\210\346\234\254:Beta 0.1</span></p><p align=\"center\"><span style=\" font-size:8pt; font-weight:700;\">\346\234\254\351\241\271\347\233\256\344\270\272\345\250\261\344\271\220\351\241\271\347\233\256,\350\257\267\345\213\277\345\225\206\347\224\250</span></p><p align=\"center\"><span style=\" font-size:8pt; font-weight:700;\">\351\241\271\347\233\256\344\275\234\350\200\205</span><a href=\"https://space.bilibili.com/1362205077?spm_id_from=333.1007.0.0\"><span style=\" font-size:8pt; font-weight:700; text-decoration: underline; color:#007af4;\">\351\223\276\346\216\245</span></a></p><p align=\"center\"><span style=\" font-size:8pt; font-weight:700;\">GitHub\351\241\271\347\233\256\346\272\220\347\240\201</span><a href=\"https://github.com/ZZHENJIE/ZMBOX\"><span style=\" font-size:8pt; font-weight:700; text-decoration: underline; color:#007af4;\">\351\223\276\346\216\245</span></a></p><p align=\"center\"><span style"
+                        "=\" font-size:8pt; font-weight:700;\">\345\217\263\351\224\256\345\244\215\345\210\266\350\277\236\346\216\245\350\256\277\351\227\256</span></p></body></html>", nullptr));
     } // retranslateUi
 
 };

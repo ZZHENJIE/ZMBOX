@@ -33,3 +33,7 @@
 
 # Dir
 .vscode
+build
+
+# QT
+*.user
