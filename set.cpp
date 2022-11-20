@@ -79,7 +79,7 @@ SET::~SET()
 
 void SET::on_Select_Background_clicked()
 {
-    QString Image_Url = QFileDialog::getOpenFileName(this,"选择图片","./",tr("*png;*jpg;*jpeg"));
+    QString Image_Url = QFileDialog::getOpenFileName(this,"选择图片","c://",tr("*png;"));
     if(!Image_Url.isEmpty())
     {
         Json->open(QFile::ReadOnly);

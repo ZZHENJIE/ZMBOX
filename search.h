@@ -1,7 +1,19 @@
 #ifndef SEARCH_H
 #define SEARCH_H
 
+#define Music_Max_Number 10
+
 #include <QWidget>
+#include <QJsonArray>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QtNetwork/QNetworkAccessManager>
+#include <QtNetwork/QNetworkRequest>
+#include <QtNetwork/QNetworkReply>
+#include <QFile>
+#include <QListWidgetItem>
+#include <QMediaPlayer>
+#include <QAudioOutput>
 
 namespace Ui {
 class SEARCH;
@@ -18,8 +30,27 @@ public:
 private slots:
     void on_PushButton_clicked();
 
+    void on_Music_List_itemClicked(QListWidgetItem *item);
+
 private:
+    //歌名 歌手名
+    QString Music_Name[Music_Max_Number];
+    QString Singer_Name[Music_Max_Number];
+    //网易云
+    QString Cloud_Music_Id[Music_Max_Number];
+    //酷狗
+    QString Kugou_Music_Hash[Music_Max_Number];
+    QString Kugou_Album_Id[Music_Max_Number];
+    QString Kugou_Album_Audio_Id[Music_Max_Number];
+    //QQ
+    QString QQ_Music_Id[Music_Max_Number];
+
+    QFile *Data_Json = new QFile("./Data/Data.json");
+    QFile *Like_Json = new QFile("./Data/Like.json");
+    QFile *Play_List_Json = new QFile("./Data/Play_List_Json.json");
+
     Ui::SEARCH *ui;
+    QJsonDocument Json_File_Temp;
 };
 
 #endif // SEARCH_H
