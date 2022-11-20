@@ -1,0 +1,8 @@
+D:/DESKTOP/TEMP/ZMBOX/build/CMakeFiles/ZMBOX.dir
+D:/DESKTOP/TEMP/ZMBOX/build/CMakeFiles/edit_cache.dir
+D:/DESKTOP/TEMP/ZMBOX/build/CMakeFiles/rebuild_cache.dir
+D:/DESKTOP/TEMP/ZMBOX/build/CMakeFiles/list_install_components.dir
+D:/DESKTOP/TEMP/ZMBOX/build/CMakeFiles/install.dir
+D:/DESKTOP/TEMP/ZMBOX/build/CMakeFiles/install/local.dir
+D:/DESKTOP/TEMP/ZMBOX/build/CMakeFiles/install/strip.dir
+D:/DESKTOP/TEMP/ZMBOX/build/CMakeFiles/ZMBOX_autogen.dir

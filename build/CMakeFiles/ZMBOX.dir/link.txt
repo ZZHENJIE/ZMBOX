@@ -1,0 +1,3 @@
+D:\TOOL\CMAKE\bin\cmake.exe -E rm -f CMakeFiles\ZMBOX.dir/objects.a
+D:\TOOL\QT\Tools\mingw1120_64\bin\ar.exe qc CMakeFiles\ZMBOX.dir/objects.a @CMakeFiles\ZMBOX.dir\objects1
+D:\TOOL\QT\Tools\mingw1120_64\bin\g++.exe -O3 -DNDEBUG -mwindows -Wl,--whole-archive CMakeFiles\ZMBOX.dir/objects.a -Wl,--no-whole-archive -o ZMBOX.exe -Wl,--out-implib,libZMBOX.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\ZMBOX.dir\linkLibs.rsp

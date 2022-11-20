@@ -1,0 +1,37 @@
+[
+{
+  "directory": "D:/DESKTOP/TEMP/ZMBOX/build",
+  "command": "D:\\TOOL\\QT\\Tools\\mingw1120_64\\bin\\g++.exe -DMINGW_HAS_SECURE_API=1 -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NEEDS_QMAIN -DQT_NETWORK_LIB -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DUNICODE -DWIN32 -DWIN64 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -D_UNICODE -D_WIN64 @CMakeFiles/ZMBOX.dir/includes_CXX.rsp -O3 -DNDEBUG -std=gnu++17 -o CMakeFiles\\ZMBOX.dir\\ZMBOX_autogen\\mocs_compilation.cpp.obj -c D:\\DESKTOP\\TEMP\\ZMBOX\\build\\ZMBOX_autogen\\mocs_compilation.cpp",
+  "file": "D:/DESKTOP/TEMP/ZMBOX/build/ZMBOX_autogen/mocs_compilation.cpp"
+},
+{
+  "directory": "D:/DESKTOP/TEMP/ZMBOX/build",
+  "command": "D:\\TOOL\\QT\\Tools\\mingw1120_64\\bin\\g++.exe -DMINGW_HAS_SECURE_API=1 -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NEEDS_QMAIN -DQT_NETWORK_LIB -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DUNICODE -DWIN32 -DWIN64 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -D_UNICODE -D_WIN64 @CMakeFiles/ZMBOX.dir/includes_CXX.rsp -O3 -DNDEBUG -std=gnu++17 -o CMakeFiles\\ZMBOX.dir\\main.cpp.obj -c D:\\DESKTOP\\TEMP\\ZMBOX\\main.cpp",
+  "file": "D:/DESKTOP/TEMP/ZMBOX/main.cpp"
+},
+{
+  "directory": "D:/DESKTOP/TEMP/ZMBOX/build",
+  "command": "D:\\TOOL\\QT\\Tools\\mingw1120_64\\bin\\g++.exe -DMINGW_HAS_SECURE_API=1 -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NEEDS_QMAIN -DQT_NETWORK_LIB -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DUNICODE -DWIN32 -DWIN64 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -D_UNICODE -D_WIN64 @CMakeFiles/ZMBOX.dir/includes_CXX.rsp -O3 -DNDEBUG -std=gnu++17 -o CMakeFiles\\ZMBOX.dir\\mainwindow.cpp.obj -c D:\\DESKTOP\\TEMP\\ZMBOX\\mainwindow.cpp",
+  "file": "D:/DESKTOP/TEMP/ZMBOX/mainwindow.cpp"
+},
+{
+  "directory": "D:/DESKTOP/TEMP/ZMBOX/build",
+  "command": "D:\\TOOL\\QT\\Tools\\mingw1120_64\\bin\\g++.exe -DMINGW_HAS_SECURE_API=1 -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NEEDS_QMAIN -DQT_NETWORK_LIB -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DUNICODE -DWIN32 -DWIN64 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -D_UNICODE -D_WIN64 @CMakeFiles/ZMBOX.dir/includes_CXX.rsp -O3 -DNDEBUG -std=gnu++17 -o CMakeFiles\\ZMBOX.dir\\set.cpp.obj -c D:\\DESKTOP\\TEMP\\ZMBOX\\set.cpp",
+  "file": "D:/DESKTOP/TEMP/ZMBOX/set.cpp"
+},
+{
+  "directory": "D:/DESKTOP/TEMP/ZMBOX/build",
+  "command": "D:\\TOOL\\QT\\Tools\\mingw1120_64\\bin\\g++.exe -DMINGW_HAS_SECURE_API=1 -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NEEDS_QMAIN -DQT_NETWORK_LIB -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DUNICODE -DWIN32 -DWIN64 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -D_UNICODE -D_WIN64 @CMakeFiles/ZMBOX.dir/includes_CXX.rsp -O3 -DNDEBUG -std=gnu++17 -o CMakeFiles\\ZMBOX.dir\\play_interface.cpp.obj -c D:\\DESKTOP\\TEMP\\ZMBOX\\play_interface.cpp",
+  "file": "D:/DESKTOP/TEMP/ZMBOX/play_interface.cpp"
+},
+{
+  "directory": "D:/DESKTOP/TEMP/ZMBOX/build",
+  "command": "D:\\TOOL\\QT\\Tools\\mingw1120_64\\bin\\g++.exe -DMINGW_HAS_SECURE_API=1 -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NEEDS_QMAIN -DQT_NETWORK_LIB -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DUNICODE -DWIN32 -DWIN64 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -D_UNICODE -D_WIN64 @CMakeFiles/ZMBOX.dir/includes_CXX.rsp -O3 -DNDEBUG -std=gnu++17 -o CMakeFiles\\ZMBOX.dir\\search.cpp.obj -c D:\\DESKTOP\\TEMP\\ZMBOX\\search.cpp",
+  "file": "D:/DESKTOP/TEMP/ZMBOX/search.cpp"
+},
+{
+  "directory": "D:/DESKTOP/TEMP/ZMBOX/build",
+  "command": "D:\\TOOL\\QT\\Tools\\mingw1120_64\\bin\\g++.exe -DMINGW_HAS_SECURE_API=1 -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NEEDS_QMAIN -DQT_NETWORK_LIB -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DUNICODE -DWIN32 -DWIN64 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -D_UNICODE -D_WIN64 @CMakeFiles/ZMBOX.dir/includes_CXX.rsp -O3 -DNDEBUG -std=gnu++17 -o CMakeFiles\\ZMBOX.dir\\ZMBOX_autogen\\EWIEGA46WW\\qrc_Resources.cpp.obj -c D:\\DESKTOP\\TEMP\\ZMBOX\\build\\ZMBOX_autogen\\EWIEGA46WW\\qrc_Resources.cpp",
+  "file": "D:/DESKTOP/TEMP/ZMBOX/build/ZMBOX_autogen/EWIEGA46WW/qrc_Resources.cpp"
+}
+]
