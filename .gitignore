@@ -31,8 +31,8 @@
 *.out
 *.app
 
-# Vscode
-.vscode
+# My
+Mydir
 
 # Cmake
 build

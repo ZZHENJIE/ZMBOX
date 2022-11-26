@@ -14,6 +14,7 @@ class PLAY_INTERFACE : public QWidget
 public:
     explicit PLAY_INTERFACE(QWidget *parent = nullptr);
     ~PLAY_INTERFACE();
+    void Set_Theme_Color(QString Color);
 
 private:
     Ui::PLAY_INTERFACE *ui;

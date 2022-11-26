@@ -26,5 +26,6 @@ private:
     SEARCH *Search;
     PLAY_INTERFACE *Play_Interface;
     SET *Set;
+    void Set_Theme_Color(QString Color);
 };
 #endif // MAINWINDOW_H

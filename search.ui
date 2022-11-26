@@ -25,18 +25,20 @@
      <height>80</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true"/>
+   </property>
    <widget class="QPushButton" name="PushButton">
     <property name="geometry">
      <rect>
-      <x>1050</x>
+      <x>1100</x>
       <y>10</y>
-      <width>100</width>
+      <width>60</width>
       <height>60</height>
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">background-color: rgba(96,111,228,150);
-border-radius: 10px;</string>
+     <string notr="true"/>
     </property>
     <property name="text">
      <string/>
@@ -58,9 +60,9 @@ border-radius: 10px;</string>
    <widget class="QLineEdit" name="Text">
     <property name="geometry">
      <rect>
-      <x>310</x>
+      <x>299</x>
       <y>10</y>
-      <width>700</width>
+      <width>771</width>
       <height>60</height>
      </rect>
     </property>
@@ -71,9 +73,7 @@ border-radius: 10px;</string>
      </font>
     </property>
     <property name="styleSheet">
-     <string notr="true">color:white;
-background-color: rgba(96,111,228,150);
-border-radius: 10px;</string>
+     <string notr="true"/>
     </property>
     <property name="maxLength">
      <number>40</number>
@@ -98,13 +98,7 @@ border-radius: 10px;</string>
      </font>
     </property>
     <property name="styleSheet">
-     <string notr="true">
-color:white;
-background-color: rgba(96,111,228,150);
-border-radius: 5px;
-down-arrow{image: url(:/Resource/List.png);}
-
- </string>
+     <string notr="true"/>
     </property>
     <property name="editable">
      <bool>false</bool>
@@ -144,7 +138,6 @@ down-arrow{image: url(:/Resource/List.png);}
    </property>
    <property name="styleSheet">
     <string notr="true">color:white;
-background-color: rgba(96,111,228,150);
 border-radius: 10px;</string>
    </property>
   </widget>

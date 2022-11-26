@@ -1,28 +1,26 @@
 <RCC>
     <qresource prefix="/">
+        <file>Resource/Across_Scroll_bar.png</file>
         <file>Resource/Audio.png</file>
+        <file>Resource/Back_Page.png</file>
         <file>Resource/Background.png</file>
         <file>Resource/Chat_Room.png</file>
-        <file>Resource/Close.png</file>
         <file>Resource/Cloud.png</file>
         <file>Resource/KuGou.png</file>
+        <file>Resource/Like.png</file>
+        <file>Resource/QCombobox.png</file>
         <file>Resource/Logo.ico</file>
         <file>Resource/Logo.png</file>
         <file>Resource/Next.png</file>
+        <file>Resource/Next_Page.png</file>
         <file>Resource/Paused.png</file>
         <file>Resource/Play.png</file>
         <file>Resource/Play_List.png</file>
         <file>Resource/QQ.png</file>
+        <file>Resource/Rect.png</file>
         <file>Resource/Search.png</file>
         <file>Resource/Set.png</file>
-        <file>Resource/Shrink.png</file>
-        <file>Resource/UP.png</file>
-        <file>Resource/Across_Scroll_bar.png</file>
-        <file>Resource/Back_Page.png</file>
-        <file>Resource/List.png</file>
-        <file>Resource/Next_Page.png</file>
+        <file>Resource/Up.png</file>
         <file>Resource/Vertical_Scroll_bar.png</file>
-        <file>Resource/Rect.png</file>
-        <file>Resource/Like.png</file>
     </qresource>
 </RCC>

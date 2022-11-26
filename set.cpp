@@ -31,6 +31,7 @@ SET::SET(QWidget *parent) :
         Root.insert("QQ_Name"," ");
         Root.insert("Background_Dir",":/Resource/Background.png");
         Root.insert("Save_While_Listening",false);
+        Root.insert("Theme_Color","96,111,228,150");
 
         QJsonDocument Temp_Json;
         Temp_Json.setObject(Root);
@@ -43,6 +44,7 @@ SET::SET(QWidget *parent) :
     QJsonDocument Temp_Json = QJsonDocument::fromJson(QByteArray(Json->readAll()));
     QJsonObject Root = Temp_Json.object();
     ui->Background_Image->setPixmap(QPixmap(Root.value("Background_Dir").toString()));//预览背景图片
+    ui->Color->setStyleSheet("background-color: rgba(" + Root.value("Theme_Color").toString() + ")");//预览主题颜色
 
     if(Root.value("Save_While_Listening").toBool())//检查边听边存功能
     {
@@ -236,6 +238,28 @@ void SET::on_Close_clicked()
 
     ui->Open_Dir->setVisible(true);
     QMessageBox::information(0,"提示","关闭成功,重新打开设置显示关闭");
+
+    this->close();
+}
+
+
+void SET::on_pushButton_clicked()
+{
+    Json->open(QFile::ReadOnly);
+    QJsonDocument Temp_Json = QJsonDocument::fromJson(QByteArray(Json->readAll()));
+    Json->close();
+    Json->open(QFile::WriteOnly);
+    QJsonObject Root = Temp_Json.object();
+
+    QJsonValueRef Value = Root.find("Theme_Color").value();
+    Value = QJsonValue(ui->R->text() + "," + ui->G->text() + "," + ui->B->text() + "," + "150");
+
+    Temp_Json.setObject(Root);
+    Json->write(QByteArray(Temp_Json.toJson()));
+
+    Json->close();
+
+    QMessageBox::information(0,"提示","设置成功,重新打开软件显示");
 
     this->close();
 }

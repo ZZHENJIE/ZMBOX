@@ -7,7 +7,6 @@ SEARCH::SEARCH(QWidget *parent) :
 {
     ui->setupUi(this);
     this->move(100,0);
-    ui->Select->addItem(QIcon(":/Resource/Cloud.png"),"网易云音乐");ui->Select->addItem(QIcon(":/Resource/QQ.png"),"QQ音乐");ui->Select->addItem(QIcon(":/Resource/KuGou.png"),"酷狗音乐");
     ui->Music_List->setVisible(false);
 }
 
@@ -211,3 +210,21 @@ void SEARCH::on_Music_List_itemClicked(QListWidgetItem *item)
     Data_Json->close();
 }
 
+void SEARCH::Set_Theme_Color(QString Color)
+{
+    ui->PushButton->setStyleSheet("background-color: rgba(" + Color + ");border-radius: 10px;");
+    ui->Text->setStyleSheet("background-color: rgba(" + Color + ");border-radius: 10px;color:white;");
+    ui->Music_List->setStyleSheet("background-color: rgba(" + Color + ");border-radius: 10px;");
+    ui->line->setStyleSheet("background-color: rgba(" + Color + ");");
+
+    ui->Select->setView(new QListView());
+    ui->Select->setStyleSheet(
+    "QComboBox {background-color: rgba(" + Color + ");border-radius: 10px;color:white;}" +
+    "QComboBox QAbstractItemView{background-color: rgba(" + Color + ");border-radius: 10px;color:white;font: 20pt '楷体';icon-size: 50pt}" +
+    "QComboBox QAbstractItemView::item {min-height: 60px;}QComboBox::drop-down{border-style: none;}"
+    );
+    ui->Select->view()->window()->setWindowFlags(Qt::Popup | Qt::FramelessWindowHint | Qt::NoDropShadowWindowHint);
+    ui->Select->view()->window()->setAttribute(Qt::WA_TranslucentBackground);
+    qApp->setEffectEnabled(Qt::UI_AnimateCombo, false);//去掉弹窗动画
+    ui->Select->addItem(QIcon(":/Resource/Cloud.png"),"网易云音乐");ui->Select->addItem(QIcon(":/Resource/QQ.png"),"QQ音乐");ui->Select->addItem(QIcon(":/Resource/KuGou.png"),"酷狗音乐");
+}

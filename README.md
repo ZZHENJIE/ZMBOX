@@ -1,4 +1,4 @@
-# 音乐盒子(Music_Box)
+# ZMBOX
 
 > 可以下载一些网易云音乐需要VIP才能下载的歌曲
 
@@ -13,7 +13,8 @@
     }
 
     {
-        "Name":"QQ音乐"
+        "Name":"QQ音乐",
+        "获取搜索内容":"https://c.y.qq.com/splcloud/fcgi-bin/smartbox_new.fcg?_=/*QQ账号*/&format=json&key=/*搜索内容*/&limit=10"
     }
 
     {
@@ -32,3 +33,13 @@
 > 作者B站:https://space.bilibili.com/1362205077?spm_id_from=333.1007.0.0
 
 > 作者学习屋项目:https://zzhenjie.github.io/Learning_House/#/
+
+
+
+https://dl.stream.qqmusic.qq.com/C400
+003E5Ddz3b429u
+.m4a?
+guid=4925389888
+&vkey=2861D26F470CD64B00E51EBE838F4692590FDC04EFD5FCFD72F4A085D9A4904CC9A73100D15AD261CC961EBCA310DD1A87AD66565EE2C23B
+&uin=508916879
+&fromtag=120032

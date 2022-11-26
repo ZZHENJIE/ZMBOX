@@ -14,6 +14,7 @@
 #include <QListWidgetItem>
 #include <QMediaPlayer>
 #include <QAudioOutput>
+#include <QListView>
 
 namespace Ui {
 class SEARCH;
@@ -26,6 +27,7 @@ class SEARCH : public QWidget
 public:
     explicit SEARCH(QWidget *parent = nullptr);
     ~SEARCH();
+    void Set_Theme_Color(QString Color);
 
 private slots:
     void on_PushButton_clicked();

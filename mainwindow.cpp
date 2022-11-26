@@ -6,8 +6,6 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    Search = new SEARCH(this);
-    Play_Interface = new PLAY_INTERFACE(this);
     this->setFixedSize(geometry().size());//设置窗口无法调整大小
     this->setWindowTitle("ZMBOX");//设置窗口标题
 
@@ -20,6 +18,11 @@ MainWindow::MainWindow(QWidget *parent)
 
     Json.close();
 
+    Search = new SEARCH(this);
+    Play_Interface = new PLAY_INTERFACE(this);
+    Search->Set_Theme_Color(Root.value("Theme_Color").toString());
+    Play_Interface->Set_Theme_Color(Root.value("Theme_Color").toString());
+    Set_Theme_Color(Root.value("Theme_Color").toString());
     Play_Interface->show();
     Search->show();
 }
@@ -36,5 +39,11 @@ void MainWindow::on_Set_clicked()
 {
     Set = new SET();
     Set->show();
+}
+
+void MainWindow::Set_Theme_Color(QString Color)
+{
+    ui->line_1->setStyleSheet("background-color: rgba(" + Color + ");");
+    ui->line_2->setStyleSheet("background-color: rgba(" + Color + ");");
 }
 
