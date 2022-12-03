@@ -16,6 +16,17 @@ public:
     ~PLAY_INTERFACE();
     void Set_Theme_Color(QString Color);
 
+private slots:
+    void on_Back_clicked();
+
+    void on_Play_clicked();
+
+    void on_Next_clicked();
+
+    void on_Audio_clicked();
+
+    void on_Image_clicked();
+
 private:
     Ui::PLAY_INTERFACE *ui;
 };

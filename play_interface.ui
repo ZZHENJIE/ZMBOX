@@ -18,8 +18,8 @@
     <rect>
      <x>480</x>
      <y>0</y>
-     <width>781</width>
-     <height>41</height>
+     <width>780</width>
+     <height>40</height>
     </rect>
    </property>
    <property name="styleSheet">
@@ -27,7 +27,7 @@
 		height: 12px; 
 		left: 0px; 
 		right: 0px; 
-		background:rgba(0,0,0,50);
+		background:rgba(0,0,0,150);
  } 
  QSlider::handle:horizontal{ 
 		width:  30px; 
@@ -39,13 +39,17 @@
  		border-image:url(:/Resource/Rect.png);
 } 
 QSlider::sub-page:horizontal{
-	   background:rgba(80,166,234,1);
-}
-
-</string>
+	   background:rgba(80,166,234,150);
+}</string>
    </property>
    <property name="maximum">
     <number>100</number>
+   </property>
+   <property name="singleStep">
+    <number>1</number>
+   </property>
+   <property name="value">
+    <number>0</number>
    </property>
    <property name="orientation">
     <enum>Qt::Horizontal</enum>
@@ -167,7 +171,7 @@ QSlider::sub-page:horizontal{
     </property>
     <property name="icon">
      <iconset resource="Resources.qrc">
-      <normaloff>:/Resource/Up.png</normaloff>:/Resource/Up.png</iconset>
+      <normaloff>:/Resource/Back.png</normaloff>:/Resource/Back.png</iconset>
     </property>
     <property name="iconSize">
      <size>
@@ -241,13 +245,8 @@ QSlider::sub-page:horizontal{
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true"> QSlider::handle:vertical{ 
-		width:  30px; 
-		height: 30px; 
-		margin-top: -10px; 
-		margin-left: 0px; 
-		margin-bottom: -10px; 
-		margin-right: 0px; 
+     <string notr="true">QSlider::handle:vertical{ 
+		
  		border-image:url(:/Resource/Rect.png);
 } </string>
     </property>

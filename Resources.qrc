@@ -8,7 +8,6 @@
         <file>Resource/Cloud.png</file>
         <file>Resource/KuGou.png</file>
         <file>Resource/Like.png</file>
-        <file>Resource/QCombobox.png</file>
         <file>Resource/Logo.ico</file>
         <file>Resource/Logo.png</file>
         <file>Resource/Next.png</file>
@@ -20,7 +19,7 @@
         <file>Resource/Rect.png</file>
         <file>Resource/Search.png</file>
         <file>Resource/Set.png</file>
-        <file>Resource/Up.png</file>
         <file>Resource/Vertical_Scroll_bar.png</file>
+        <file>Resource/Back.png</file>
     </qresource>
 </RCC>

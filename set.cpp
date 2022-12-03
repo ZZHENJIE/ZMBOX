@@ -10,21 +10,21 @@ SET::SET(QWidget *parent) :
     this->setWindowTitle("设置");//设置窗口标题
     this->setWindowIcon(QIcon(":/Resource/Set.png"));//设置窗口图标
     
-    if(!QDir("./Data").exists())
+    if(!QDir("./Data").exists())//如果没有文件夹返回真
     {
         QDir Temp_Dir;
-        Temp_Dir.mkdir("./Data");
+        Temp_Dir.mkdir("./Data");//创建文件夹
 
-        QFile Temp_File("./Data/Like.json");
+        QFile Temp_File("./Data/Like.json");//创建喜欢列表文件
         Temp_File.open(QFile::WriteOnly);
         Temp_File.close();
-        Temp_File.setFileName("./Data/Play_List.json");
+        Temp_File.setFileName("./Data/Play_List.json");//创建播放列表文件
         Temp_File.open(QFile::WriteOnly);
         Temp_File.close();
         
         Json->open(QFile::WriteOnly);
 
-        QJsonObject Root;
+        QJsonObject Root;//写入Data文件的值
         Root.insert("QQ_Logged",false);
         Root.insert("QQ_Number"," ");
         Root.insert("QQ_Image_Url"," ");
@@ -173,17 +173,17 @@ void SET::on_Log_Pushbutton_clicked()
 void SET::on_Exit_Log_clicked()
 {
     Json->open(QFile::ReadOnly);
-        QJsonDocument Temp_Json = QJsonDocument::fromJson(QByteArray(Json->readAll()));
-        Json->close();
-        Json->open(QFile::WriteOnly);
-        QJsonObject Root = Temp_Json.object();
+    QJsonDocument Temp_Json = QJsonDocument::fromJson(QByteArray(Json->readAll()));
+    Json->close();
+    Json->open(QFile::WriteOnly);
+    QJsonObject Root = Temp_Json.object();
 
-        QJsonValueRef Value = Root.find("QQ_Logged").value();
-        Value = QJsonValue(false);
+    QJsonValueRef Value = Root.find("QQ_Logged").value();
+    Value = QJsonValue(false);
 
-        Temp_Json.setObject(Root);
-        Json->write(QByteArray(Temp_Json.toJson()));
-        Json->close();
+    Temp_Json.setObject(Root);
+    Json->write(QByteArray(Temp_Json.toJson()));
+    Json->close();
 
     QMessageBox::information(0,"提示","退出成功,重新打开设置显示");
     this->close();
@@ -259,7 +259,7 @@ void SET::on_pushButton_clicked()
 
     Json->close();
 
-    QMessageBox::information(0,"提示","设置成功,重新打开软件显示");
+    QMessageBox::information(0,"提示","修改主题颜色后需要重新启动软件");
 
     this->close();
 }

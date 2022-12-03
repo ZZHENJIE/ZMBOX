@@ -47,3 +47,15 @@ void MainWindow::Set_Theme_Color(QString Color)
     ui->line_2->setStyleSheet("background-color: rgba(" + Color + ");");
 }
 
+
+void MainWindow::on_Like_clicked()
+{
+    Search->Like_List_Show();
+}
+
+
+void MainWindow::on_Play_clicked()
+{
+    Search->Play_List_Show();
+}
+

@@ -15,6 +15,8 @@
 #include <QMediaPlayer>
 #include <QAudioOutput>
 #include <QListView>
+#include <QDir>
+#include "mthread.h"
 
 namespace Ui {
 class SEARCH;
@@ -28,11 +30,23 @@ public:
     explicit SEARCH(QWidget *parent = nullptr);
     ~SEARCH();
     void Set_Theme_Color(QString Color);
+    void Play_List_Show();
+    void Like_List_Show();
 
 private slots:
     void on_PushButton_clicked();
 
     void on_Music_List_itemClicked(QListWidgetItem *item);
+
+    void on_Back_clicked();
+
+    void on_Play_All_clicked();
+
+    void on_Delete_clicked();
+
+    void on_Download_clicked();
+
+    void on_Add_Like_clicked();
 
 private:
     //歌名 歌手名
@@ -47,12 +61,17 @@ private:
     //QQ
     QString QQ_Music_Id[Music_Max_Number];
 
+    QJsonDocument Json_File_Temp;
+
     QFile *Data_Json = new QFile("./Data/Data.json");
     QFile *Like_Json = new QFile("./Data/Like.json");
-    QFile *Play_List_Json = new QFile("./Data/Play_List_Json.json");
+    QFile *Play_Json = new QFile("./Data/Play.json");
+
+    MThread *Download_Thread;
 
     Ui::SEARCH *ui;
-    QJsonDocument Json_File_Temp;
+
+    void Get_Ever_Day_Music();
 };
 
 #endif // SEARCH_H

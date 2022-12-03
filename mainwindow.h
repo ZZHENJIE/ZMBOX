@@ -21,6 +21,10 @@ public:
 private slots:
     void on_Set_clicked();
 
+    void on_Like_clicked();
+
+    void on_Play_clicked();
+
 private:
     Ui::MainWindow *ui;
     SEARCH *Search;
