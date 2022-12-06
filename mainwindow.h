@@ -25,6 +25,8 @@ private slots:
 
     void on_Play_clicked();
 
+    void on_Room_clicked();
+
 private:
     Ui::MainWindow *ui;
     SEARCH *Search;

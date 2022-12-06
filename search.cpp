@@ -10,8 +10,22 @@ SEARCH::SEARCH(QWidget *parent) :
     Download_Thread = new MThread();
     ui->Music_List->setVisible(false);
     ui->Play_Like->setVisible(false);
+    ui->Chat_Room->setVisible(false);
     ui->EverDayMusic->setVisible(true);
+
+    Chat_Client.connectToHost("47.99.61.145",2005);
+    if(Chat_Client.waitForConnected() == false)
+    {
+        QMessageBox::information(0,"提示","连接服务器失败!!!");
+    }
+    connect(&Chat_Client,SIGNAL(readyRead()),this,SLOT(Server_Send()));
+
     Get_Ever_Day_Music();
+
+    Data_Json->open(QFile::ReadOnly);
+    QJsonDocument Temp_Json = QJsonDocument::fromJson(QByteArray(Data_Json->readAll()));
+    Data_Json->close();
+    User_Name = Temp_Json.object().value("QQ_Name").toString();
 }
 
 SEARCH::~SEARCH()
@@ -21,6 +35,7 @@ SEARCH::~SEARCH()
     delete Play_Json;
     delete ui;
     delete Download_Thread;
+    Chat_Client.close();
 }
 
 void SEARCH::on_PushButton_clicked()
@@ -89,15 +104,6 @@ void SEARCH::on_PushButton_clicked()
             }
             case 1://QQ
             {
-                for(int i = 0; i < Music_Max_Number;i++)
-                {
-                    Music_Name[i] = " ";
-                    Singer_Name[i] = " ";
-                }
-                break;
-            }
-            case 2://酷狗
-            {
                 //获取搜索结果
                 QNetworkAccessManager *Manager = new QNetworkAccessManager();
                 QNetworkReply *Reply = Manager->get(QNetworkRequest(QUrl("http://mobilecdn.kugou.com/api/v3/search/song?keyword=" + ui->Text->text() + "&page=1&pagesize=10")));
@@ -138,6 +144,15 @@ void SEARCH::on_PushButton_clicked()
                         //8存储歌手名
                         Singer_Name[i] = Value_2.value("singername").toString();
                     }
+                }
+                break;
+            }
+            case 2://酷狗
+            {
+                for(int i = 0; i < Music_Max_Number;i++)
+                {
+                    Music_Name[i] = " ";
+                    Singer_Name[i] = " ";
                 }
                 break;
             }
@@ -191,11 +206,7 @@ void SEARCH::on_Music_List_itemClicked(QListWidgetItem *item)
             }
             break;
         }
-        case 1://QQ音乐
-        {
-            break;
-        }
-        case 2://酷狗音乐
+        case 1://酷狗音乐
         {
             Play_Json->open(QFile::ReadOnly);
             QJsonDocument Temp_Json = QJsonDocument::fromJson(QByteArray(Play_Json->readAll()));
@@ -230,6 +241,10 @@ void SEARCH::on_Music_List_itemClicked(QListWidgetItem *item)
             }
             break;
         }
+        case 2://QQ音乐
+        {
+            break;
+        }
     }
 }
 void SEARCH::Set_Theme_Color(QString Color)
@@ -251,7 +266,7 @@ void SEARCH::Set_Theme_Color(QString Color)
     ui->Select->view()->window()->setAttribute(Qt::WA_TranslucentBackground);
     qApp->setEffectEnabled(Qt::UI_AnimateCombo, false);//去掉弹窗动画
 
-    ui->Select->addItem(QIcon(":/Resource/Cloud.png"),"网易云音乐");ui->Select->addItem(QIcon(":/Resource/QQ.png"),"QQ音乐");ui->Select->addItem(QIcon(":/Resource/KuGou.png"),"酷狗音乐");
+    ui->Select->addItem(QIcon(":/Resource/Cloud.png"),"网易云音乐");ui->Select->addItem(QIcon(":/Resource/KuGou.png"),"酷狗音乐");ui->Select->addItem(QIcon(":/Resource/QQ.png"),"QQ音乐");
 
     ui->List_0->setStyleSheet("background-color: rgba(" + Color + ");border-radius: 8px;");
     ui->List_1->setStyleSheet("background-color: rgba(" + Color + ");border-radius: 8px;");
@@ -269,11 +284,17 @@ void SEARCH::Set_Theme_Color(QString Color)
     ui->Download->setStyleSheet("background-color: rgba(" + Color + ");border-radius: 5px;color:white;");
     ui->Play_All->setStyleSheet("background-color: rgba(" + Color + ");border-radius: 5px;color:white;");
     ui->Like_Play_List->setStyleSheet("background-color: rgba(" + Color + ");border-radius: 8px;color:white;font: 15pt '楷体';");
+
+    ui->Message->setStyleSheet("background-color: rgba(" + Color + ");border-radius: 8px;color:white;font: 15pt '楷体';");
+    ui->Send->setStyleSheet("background-color: rgba(" + Color + ");border-radius: 8px;");
+    ui->Clear->setStyleSheet("background-color: rgba(" + Color + ");border-radius: 8px;");
+    ui->Input->setStyleSheet("background-color: rgba(" + Color + ");border-radius: 8px;color:white;");
 }
 void SEARCH::on_Back_clicked()
 {
     ui->Music_List->setVisible(false);
     ui->Play_Like->setVisible(false);
+    ui->Chat_Room->setVisible(false);
     ui->EverDayMusic->setVisible(true);
 }
 
@@ -374,6 +395,7 @@ void SEARCH::Play_List_Show()
     ui->Play_Like->setVisible(true);
     ui->Music_List->setVisible(false);
     ui->EverDayMusic->setVisible(false);
+    ui->Chat_Room->setVisible(false);
     ui->Add_Like->setVisible(true);
 
     Play_Json->open(QFile::ReadOnly);
@@ -409,6 +431,7 @@ void SEARCH::Like_List_Show()
     ui->Play_Like->setVisible(true);
     ui->Music_List->setVisible(false);
     ui->EverDayMusic->setVisible(false);
+    ui->Chat_Room->setVisible(false);
     ui->Add_Like->setVisible(false);
 
     Like_Json->open(QFile::ReadOnly);
@@ -440,11 +463,7 @@ void SEARCH::Like_List_Show()
 
 void SEARCH::on_Play_All_clicked()
 {
-    if(ui->Add_Like->isVisible())
-    {
-        
-    }
-    else
+    if(!ui->Add_Like->isVisible())
     {
         Like_Json->open(QFile::ReadOnly);
         QJsonDocument Temp_Json = QJsonDocument::fromJson(QByteArray(Like_Json->readAll()));
@@ -454,6 +473,7 @@ void SEARCH::on_Play_All_clicked()
         Play_Json->write(QByteArray(Temp_Json.toJson()));
         Play_Json->close();
     }
+    State = 1;
 }
 
 
@@ -491,6 +511,7 @@ void SEARCH::on_Delete_clicked()
 
         Like_List_Show();
     }
+    State = 2;
 }
 
 
@@ -516,7 +537,7 @@ void SEARCH::on_Download_clicked()
         else if(Root.value("Platform").toString() == "K")
         {
             QString Download_Url = "https://wwwapi.kugou.com/yy/index.php?r=play/getdata&hash=" + Root.value("Music_Hash").toString() + "&album_id=" + Root.value("Album_Id").toString() + "&album_audio_id=" + Root.value("Album_Audio_Id").toString();
-            Download_Thread->run(Download_Url,2,Root.value("Music_Name").toString(),Root.value("Singer_Name").toString());
+            Download_Thread->run(Download_Url,1,Root.value("Music_Name").toString(),Root.value("Singer_Name").toString());
         }
         else if(Root.value("Platform").toString() == "Q")
         {
@@ -537,7 +558,7 @@ void SEARCH::on_Download_clicked()
         else if(Root.value("Platform").toString() == "K")
         {
             QString Download_Url = "https://wwwapi.kugou.com/yy/index.php?r=play/getdata&hash=" + Root.value("Music_Hash").toString() + "&album_id=" + Root.value("Album_Id").toString() + "&album_audio_id=" + Root.value("Album_Audio_Id").toString();
-            Download_Thread->run(Download_Url,2,Root.value("Music_Name").toString(),Root.value("Singer_Name").toString());
+            Download_Thread->run(Download_Url,1,Root.value("Music_Name").toString(),Root.value("Singer_Name").toString());
         }
         else if(Root.value("Platform").toString() == "Q")
         {
@@ -583,3 +604,51 @@ void SEARCH::on_Add_Like_clicked()
         Like_Json->close();
     }
 }
+
+int SEARCH::Return_State()
+{
+    return State;
+}
+
+void SEARCH::Init_State()
+{
+    State = 0;
+}
+
+void SEARCH::Chat_Room_Show()
+{
+    ui->Music_List->setVisible(false);
+    ui->Play_Like->setVisible(false);
+    ui->EverDayMusic->setVisible(false);
+    ui->Chat_Room->setVisible(true);
+}
+
+void SEARCH::Server_Send()
+{
+    QByteArray Temp = Chat_Client.readAll();
+    ui->Message->addItem(Temp.data());
+}
+
+
+void SEARCH::on_Send_clicked()
+{
+    QString Message = User_Name + " : " + ui->Input->text();
+    if(Message.size() < 1024)
+    {
+        QByteArray Data = Message.toUtf8();
+        Chat_Client.write(Data);
+    }
+    else
+    {
+        QMessageBox::information(0,"提示","输入文字过多,请减少输入");
+    }
+}
+
+
+void SEARCH::on_Clear_clicked()
+{
+    ui->Input->clear();
+    ui->Message->clear();
+}
+
+

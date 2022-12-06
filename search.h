@@ -16,6 +16,8 @@
 #include <QAudioOutput>
 #include <QListView>
 #include <QDir>
+#include <QByteArray>
+#include <QTcpSocket>
 #include "mthread.h"
 
 namespace Ui {
@@ -32,6 +34,9 @@ public:
     void Set_Theme_Color(QString Color);
     void Play_List_Show();
     void Like_List_Show();
+    void Chat_Room_Show();
+    int Return_State();
+    void Init_State();
 
 private slots:
     void on_PushButton_clicked();
@@ -47,6 +52,12 @@ private slots:
     void on_Download_clicked();
 
     void on_Add_Like_clicked();
+
+    void on_Send_clicked();
+
+    void on_Clear_clicked();
+
+    void Server_Send();
 
 private:
     //歌名 歌手名
@@ -70,8 +81,12 @@ private:
     MThread *Download_Thread;
 
     Ui::SEARCH *ui;
+    QTcpSocket Chat_Client;
+    QString User_Name = " ";
 
     void Get_Ever_Day_Music();
+
+    int State = 0;//0 = 无 1 = 播放全部 2 = 删除歌曲
 };
 
 #endif // SEARCH_H

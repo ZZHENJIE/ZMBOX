@@ -1,7 +1,5 @@
 # ZMBOX
-
-> 可以下载一些网易云音乐需要VIP才能下载的歌曲
-
+* 使用QT6.2LTS版本
 ## 项目用到的API
 ``` json
 [
@@ -31,6 +29,6 @@
 ]
 ```
 
-> 作者B站:https://space.bilibili.com/1362205077?spm_id_from=333.1007.0.0
+* 作者B站:https://space.bilibili.com/1362205077?spm_id_from=333.1007.0.0
 
-> 作者学习屋项目:https://zzhenjie.github.io/Learning_House/#/
+* 作者学习屋:https://zzhenjie.github.io/Learning_House/#/

@@ -648,11 +648,89 @@
     </property>
    </widget>
   </widget>
+  <widget class="QWidget" name="Chat_Room" native="true">
+   <property name="geometry">
+    <rect>
+     <x>5</x>
+     <y>95</y>
+     <width>1170</width>
+     <height>500</height>
+    </rect>
+   </property>
+   <widget class="QListWidget" name="Message">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>1170</width>
+      <height>430</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="Send">
+    <property name="geometry">
+     <rect>
+      <x>1060</x>
+      <y>435</y>
+      <width>110</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>楷体</family>
+      <pointsize>16</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>发送</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="Input">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>435</y>
+      <width>1050</width>
+      <height>65</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>楷体</family>
+      <pointsize>20</pointsize>
+     </font>
+    </property>
+    <property name="inputMask">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="Clear">
+    <property name="geometry">
+     <rect>
+      <x>1060</x>
+      <y>470</y>
+      <width>110</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>楷体</family>
+      <pointsize>16</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>清空</string>
+    </property>
+   </widget>
+  </widget>
   <zorder>Music_List</zorder>
   <zorder>Search</zorder>
   <zorder>line</zorder>
   <zorder>EverDayMusic</zorder>
   <zorder>Play_Like</zorder>
+  <zorder>Chat_Room</zorder>
  </widget>
  <resources>
   <include location="Resources.qrc"/>

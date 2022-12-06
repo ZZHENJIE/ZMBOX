@@ -32,6 +32,7 @@ MainWindow::~MainWindow()
     delete ui;
     delete Set;
     delete Play_Interface;
+    delete Search;
 }
 
 
@@ -50,12 +51,21 @@ void MainWindow::Set_Theme_Color(QString Color)
 
 void MainWindow::on_Like_clicked()
 {
+    Search->Init_State();
     Search->Like_List_Show();
+    Play_Interface->Play_State(Search->Return_State());
 }
 
 
 void MainWindow::on_Play_clicked()
 {
+    Search->Init_State();
     Search->Play_List_Show();
+    Play_Interface->Play_State(Search->Return_State());
 }
 
+
+void MainWindow::on_Room_clicked()
+{
+    Search->Chat_Room_Show();
+}

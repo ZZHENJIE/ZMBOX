@@ -2,7 +2,6 @@
 
 void MThread::run(QString Download_Url,int Platform,QString Music_Name,QString Singer_Name)
 {
-    qDebug() << Download_Url;
     switch(Platform)
     {
         case 0:
@@ -33,17 +32,11 @@ void MThread::run(QString Download_Url,int Platform,QString Music_Name,QString S
             }
             else
             {
-                QMessageBox Message;
-                Message.setText("选择歌曲可能需要VIP或遇到下载问题");
-                Message.exec();
+                QMessageBox::information(0,"提示","选择歌曲可能需要VIP或遇到下载问题");
             }
             break;
         }
         case 1:
-        {
-            break;
-        }
-        case 2:
         {
             QNetworkRequest Url;
             Url.setUrl(QUrl(Download_Url));
@@ -74,10 +67,12 @@ void MThread::run(QString Download_Url,int Platform,QString Music_Name,QString S
             }
             else
             {
-                QMessageBox Message;
-                Message.setText("选择歌曲可能需要VIP或遇到下载问题");
-                Message.exec();
+                QMessageBox::information(0,"提示","选择歌曲可能需要VIP或遇到下载问题");
             }
+            break;
+        }
+        case 2:
+        {
             break;
         }
     }
