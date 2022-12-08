@@ -24,7 +24,6 @@ public:
     explicit PLAY_INTERFACE(QWidget *parent = nullptr);
     ~PLAY_INTERFACE();
     void Set_Theme_Color(QString Color);
-    void Play_State(int State);
 
 private slots:
     void GetDuration();
@@ -40,6 +39,17 @@ private slots:
     void on_Audio_clicked();
 
     void on_Image_clicked();
+
+    void Update_Music_List();
+
+    void Play_Number_Init();
+
+    void on_Music_Pos_sliderReleased();
+
+    void on_Audio_Size_sliderReleased();
+
+signals:
+    void Clicked_Icon();
 
 private:
     QAudioOutput Audio_OP;

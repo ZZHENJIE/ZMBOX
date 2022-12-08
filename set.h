@@ -44,6 +44,9 @@ private slots:
 
     void on_pushButton_clicked();
 
+signals:
+    void Reboot_Signals();
+
 private:
     QFile* Json = new QFile("./Data/Data.json");
     Ui::Set *ui;

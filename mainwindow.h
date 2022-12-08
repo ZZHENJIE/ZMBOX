@@ -1,10 +1,14 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#define REBOOT 1
+
 #include <QMainWindow>
+#include <QDialog>
 #include "set.h"
 #include "play_interface.h"
 #include "search.h"
+
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -26,6 +30,8 @@ private slots:
     void on_Play_clicked();
 
     void on_Room_clicked();
+
+    void Reboot();
 
 private:
     Ui::MainWindow *ui;

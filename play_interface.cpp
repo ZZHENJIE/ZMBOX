@@ -20,8 +20,8 @@ PLAY_INTERFACE::PLAY_INTERFACE(QWidget *parent) :
     Data_Json.close();
 
     Save_While_Listening = Temp_Json.object().value("Save_While_Listening").toBool();
-    //ui->Audio_Size->value()
-    Audio_OP.setVolume(50 * 1.0);//初始化声音大小
+
+    Audio_OP.setVolume(ui->Audio_Size->value() * 1.0);//初始化声音大小
     Music_Media.setAudioOutput(&Audio_OP);//设置音频输出
 
     connect(&Music_Media,SIGNAL(durationChanged(qint64)),this,SLOT(GetDuration()));
@@ -41,6 +41,8 @@ void PLAY_INTERFACE::Set_Theme_Color(QString Color)
     ui->Back->setStyleSheet("background-color: rgba(" + Color + ");border-radius: 10px;");
     ui->Next->setStyleSheet("background-color: rgba(" + Color + ");border-radius: 10px;");
     ui->Audio->setStyleSheet("background-color: rgba(" + Color + ");border-radius: 10px;");
+
+    ui->Image->setStyleSheet("background-color: rgba(" + Color + ");border-radius: 8px;");
 }
 
 void PLAY_INTERFACE::on_Back_clicked()
@@ -108,23 +110,7 @@ void PLAY_INTERFACE::on_Audio_clicked()
 
 void PLAY_INTERFACE::on_Image_clicked()
 {
-
-}
-
-
-void PLAY_INTERFACE::Play_State(int State)
-{
-    if(State == 1)
-    {
-        Play_Number = 0;
-    }
-    else if(State == 2)
-    {
-        Play_Json->open(QFile::ReadOnly);
-        QJsonDocument Temp_Json = QJsonDocument::fromJson(QByteArray(Play_Json->readAll()));
-        Play_Json->close();
-        Play_List = Temp_Json.array();
-    }
+    Clicked_Icon();
 }
 
 void PLAY_INTERFACE::Change_Music()
@@ -154,6 +140,24 @@ void PLAY_INTERFACE::Change_Music()
         if(Value_2.value("url").isNull() == false)//判断音乐神佛可下载
         {
             Play_Url = Value_2.value("url").toString();
+
+            Reply = Manager->get(QNetworkRequest(QUrl("https://tenapi.cn/wyyinfo/?id=" + Play_List.at(Play_Number).toObject().value("Music_Id").toString())));
+            connect(Manager, SIGNAL(finished(QNetworkReply*)), &EventLoop, SLOT(quit()));
+            EventLoop.exec();
+
+            Temp = QJsonDocument::fromJson(Reply->readAll());
+
+            Reply = Manager->get(QNetworkRequest(QUrl(Temp.object().value("data").toObject().value("cover").toString() + "?param=150y150")));
+            connect(Manager, SIGNAL(finished(QNetworkReply*)), &EventLoop, SLOT(quit()));
+            EventLoop.exec();
+
+            //保存Image
+            QFile Image(".\\Data\\Music_Image.png");
+            Image.open(QFile::WriteOnly);
+            Image.write(Reply->readAll());
+            Image.close();
+
+            ui->Image->setIcon(QIcon("./Data/Music_Image.png"));
         }
         else
         {
@@ -187,6 +191,17 @@ void PLAY_INTERFACE::Change_Music()
         if(Root.value("status").toInt() == 1)
         {
             Play_Url = Root.value("data").toObject().value("play_url").toString();
+            Reply = Manager->get(QNetworkRequest(QUrl(Root.value("data").toObject().value("img").toString())));
+            connect(Manager, SIGNAL(finished(QNetworkReply*)), &EventLoop, SLOT(quit()));
+            EventLoop.exec();
+
+            //保存Image
+            QFile Image(".\\Data\\Music_Image.png");
+            Image.open(QFile::WriteOnly);
+            Image.write(Reply->readAll());
+            Image.close();
+
+            ui->Image->setIcon(QIcon("./Data/Music_Image.png"));
         }
         else
         {
@@ -198,7 +213,6 @@ void PLAY_INTERFACE::Change_Music()
     {
 
     }
-    //connect(&Music_Media, SIGNAL(positionChanged(qint64)), this, SLOT(positionChanged(qint64)));
     Music_Media.setSource(QUrl(Play_Url));
     Music_Media.play();
     Time.start();
@@ -212,28 +226,6 @@ void PLAY_INTERFACE::ON_Time_Out()
     QString Minute = QString::number(ui->Music_Pos->value() / 60);
     QString Second = QString::number(ui->Music_Pos->value() % 60);
     ui->Time->setText(Minute + ":" + Second + "/" + QString::number(Muisc_Max_Leng / 60) + ":" + QString::number(Muisc_Max_Leng % 60));
-    // if(Lyrics[Now_Lyrics].at(2) == Minute)
-    // {
-    //     if(Second.toInt() < 10)
-    //     {
-    //         if(Lyrics[Now_Lyrics].at(5) == Second)
-    //         {
-    //             ui->Lyrics_List->item(Now_Lyrics)->setBackground(Brush);
-    //             Now_Lyrics++;
-    //         }
-    //     }
-    //     else
-    //     {
-    //         QString Temp[2];
-    //         Temp[0] = Lyrics[Now_Lyrics].at(4);
-    //         Temp[1] = Lyrics[Now_Lyrics].at(5);
-    //         if(Temp[0] + Temp[1] == Second)
-    //         {
-    //             ui->Lyrics_List->item(Now_Lyrics)->setBackground(Brush);
-    //             Now_Lyrics++;
-    //         }
-    //     }
-    // }
     if(Music_Media.position()/1000 == Muisc_Max_Leng)
     {
         on_Next_clicked();
@@ -245,3 +237,32 @@ void PLAY_INTERFACE::GetDuration()
     Muisc_Max_Leng = Music_Media.duration()/1000;
     ui->Music_Pos->setRange(0,Muisc_Max_Leng);
 }
+
+
+void PLAY_INTERFACE::Update_Music_List()
+{
+    Play_Json->open(QFile::ReadOnly);
+    QJsonDocument Temp_Json = QJsonDocument::fromJson(QByteArray(Play_Json->readAll()));
+    Play_Json->close();
+    Play_List = Temp_Json.array();
+}
+
+void PLAY_INTERFACE::Play_Number_Init()
+{
+    Play_Number = 0;
+    Change_Music();
+    ui->Play->setIcon(QIcon(":/Resource/Paused.png"));
+}
+
+
+void PLAY_INTERFACE::on_Music_Pos_sliderReleased()
+{
+    Music_Media.setPosition(ui->Music_Pos->value()*1000);
+}
+
+
+void PLAY_INTERFACE::on_Audio_Size_sliderReleased()
+{
+    Audio_OP.setVolume((float)ui->Audio_Size->value()/100);
+}
+

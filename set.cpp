@@ -98,7 +98,8 @@ void SET::on_Select_Background_clicked()
 
         Json->close();
 
-        QMessageBox::information(0,"提示","修改背景后需要重新启动软件");
+        QMessageBox::information(0,"提示","修改背景后,需要重新启动软件");
+        Reboot_Signals();
         this->close();
     }
 }
@@ -164,7 +165,8 @@ void SET::on_Log_Pushbutton_clicked()
         Image.write(Reply->readAll());
         Image.close();
 
-        QMessageBox::information(0,"提示","登入成功,重新打开设置显示");
+        QMessageBox::information(0,"提示","登入成功,需要重新启动软件");
+        Reboot_Signals();
         this->close();
     }
 }
@@ -214,8 +216,8 @@ void SET::on_Open_clicked()
         Temp_Dir.mkdir("./Music");
     }
 
-    QMessageBox::information(0,"提示","开启成功,重新打开设置显示开启");
-
+    QMessageBox::information(0,"提示","开启成功,需要重新启动软件");
+    Reboot_Signals();
     this->close();
 }
 
@@ -237,8 +239,8 @@ void SET::on_Close_clicked()
     Json->close();
 
     ui->Open_Dir->setVisible(true);
-    QMessageBox::information(0,"提示","关闭成功,重新打开设置显示关闭");
-
+    QMessageBox::information(0,"提示","关闭成功,需要重新启动软件");
+    Reboot_Signals();
     this->close();
 }
 
@@ -259,8 +261,8 @@ void SET::on_pushButton_clicked()
 
     Json->close();
 
-    QMessageBox::information(0,"提示","修改主题颜色后需要重新启动软件");
-
+    QMessageBox::information(0,"提示","修改主题颜色后,需要重新启动软件");
+    Reboot_Signals();
     this->close();
 }
 

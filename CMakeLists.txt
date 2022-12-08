@@ -21,12 +21,14 @@ set(PROJECT_SOURCES
         play_interface.cpp
         search.cpp
         mthread.cpp
+        server.cpp
 
         mainwindow.h
         set.h
         play_interface.h
         search.h
         mthread.h
+        server.h
 
         mainwindow.ui
         set.ui

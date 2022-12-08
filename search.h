@@ -19,6 +19,7 @@
 #include <QByteArray>
 #include <QTcpSocket>
 #include "mthread.h"
+#include "server.h"
 
 namespace Ui {
 class SEARCH;
@@ -36,7 +37,6 @@ public:
     void Like_List_Show();
     void Chat_Room_Show();
     int Return_State();
-    void Init_State();
 
 private slots:
     void on_PushButton_clicked();
@@ -59,6 +59,14 @@ private slots:
 
     void Server_Send();
 
+    void Music_Data_Show();
+
+signals:
+
+    void Play_All();
+
+    void Update_Music();
+
 private:
     //歌名 歌手名
     QString Music_Name[Music_Max_Number];
@@ -79,14 +87,11 @@ private:
     QFile *Play_Json = new QFile("./Data/Play.json");
 
     MThread *Download_Thread;
-
+    SERVER *Server;
     Ui::SEARCH *ui;
-    QTcpSocket Chat_Client;
     QString User_Name = " ";
 
     void Get_Ever_Day_Music();
-
-    int State = 0;//0 = 无 1 = 播放全部 2 = 删除歌曲
 };
 
 #endif // SEARCH_H

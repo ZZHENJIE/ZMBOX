@@ -13,12 +13,7 @@ SEARCH::SEARCH(QWidget *parent) :
     ui->Chat_Room->setVisible(false);
     ui->EverDayMusic->setVisible(true);
 
-    Chat_Client.connectToHost("47.99.61.145",2005);
-    if(Chat_Client.waitForConnected() == false)
-    {
-        QMessageBox::information(0,"提示","连接服务器失败!!!");
-    }
-    connect(&Chat_Client,SIGNAL(readyRead()),this,SLOT(Server_Send()));
+    Server = new SERVER();
 
     Get_Ever_Day_Music();
 
@@ -26,16 +21,18 @@ SEARCH::SEARCH(QWidget *parent) :
     QJsonDocument Temp_Json = QJsonDocument::fromJson(QByteArray(Data_Json->readAll()));
     Data_Json->close();
     User_Name = Temp_Json.object().value("QQ_Name").toString();
+
+    connect(Server,SIGNAL(Server_Send_Signals()),this,SLOT(Server_Send()));
 }
 
 SEARCH::~SEARCH()
 {
+    delete Server;
     delete Data_Json;
     delete Like_Json;
     delete Play_Json;
     delete ui;
     delete Download_Thread;
-    Chat_Client.close();
 }
 
 void SEARCH::on_PushButton_clicked()
@@ -246,6 +243,7 @@ void SEARCH::on_Music_List_itemClicked(QListWidgetItem *item)
             break;
         }
     }
+    Update_Music();
 }
 void SEARCH::Set_Theme_Color(QString Color)
 {
@@ -473,7 +471,7 @@ void SEARCH::on_Play_All_clicked()
         Play_Json->write(QByteArray(Temp_Json.toJson()));
         Play_Json->close();
     }
-    State = 1;
+    Play_All();
 }
 
 
@@ -511,7 +509,7 @@ void SEARCH::on_Delete_clicked()
 
         Like_List_Show();
     }
-    State = 2;
+    Update_Music();
 }
 
 
@@ -605,16 +603,6 @@ void SEARCH::on_Add_Like_clicked()
     }
 }
 
-int SEARCH::Return_State()
-{
-    return State;
-}
-
-void SEARCH::Init_State()
-{
-    State = 0;
-}
-
 void SEARCH::Chat_Room_Show()
 {
     ui->Music_List->setVisible(false);
@@ -623,28 +611,6 @@ void SEARCH::Chat_Room_Show()
     ui->Chat_Room->setVisible(true);
 }
 
-void SEARCH::Server_Send()
-{
-    QByteArray Temp = Chat_Client.readAll();
-    ui->Message->addItem(Temp.data());
-}
-
-
-void SEARCH::on_Send_clicked()
-{
-    QString Message = User_Name + " : " + ui->Input->text();
-    if(Message.size() < 1024)
-    {
-        QByteArray Data = Message.toUtf8();
-        Chat_Client.write(Data);
-    }
-    else
-    {
-        QMessageBox::information(0,"提示","输入文字过多,请减少输入");
-    }
-}
-
-
 void SEARCH::on_Clear_clicked()
 {
     ui->Input->clear();
@@ -652,3 +618,26 @@ void SEARCH::on_Clear_clicked()
 }
 
 
+void SEARCH::Music_Data_Show()
+{
+    
+}
+
+
+void SEARCH::Server_Send()
+{
+    ui->Message->addItem(Server->Data.data());
+}
+
+
+void SEARCH::on_Send_clicked()
+{
+    if(ui->Input->text().size() < 1024)
+    {
+        Server->Client_Send(ui->Input->text());
+    }
+    else
+    {
+        QMessageBox::information(0,"提示","输入字符过多");
+    }
+}

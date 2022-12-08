@@ -60,8 +60,8 @@ QSlider::sub-page:horizontal{
     <rect>
      <x>350</x>
      <y>0</y>
-     <width>121</width>
-     <height>41</height>
+     <width>120</width>
+     <height>30</height>
     </rect>
    </property>
    <property name="font">
@@ -69,6 +69,9 @@ QSlider::sub-page:horizontal{
      <family>Cascadia Code</family>
      <pointsize>10</pointsize>
     </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color:white;</string>
    </property>
    <property name="text">
     <string/>
@@ -79,7 +82,7 @@ QSlider::sub-page:horizontal{
     <rect>
      <x>130</x>
      <y>30</y>
-     <width>150</width>
+     <width>340</width>
      <height>50</height>
     </rect>
    </property>
@@ -89,8 +92,14 @@ QSlider::sub-page:horizontal{
      <pointsize>16</pointsize>
     </font>
    </property>
+   <property name="styleSheet">
+    <string notr="true">color:white;</string>
+   </property>
    <property name="text">
     <string/>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
    </property>
   </widget>
   <widget class="QPushButton" name="Image">
@@ -103,7 +112,7 @@ QSlider::sub-page:horizontal{
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true">border-radius: 10px;</string>
+    <string notr="true"/>
    </property>
    <property name="text">
     <string/>
@@ -114,8 +123,8 @@ QSlider::sub-page:horizontal{
    </property>
    <property name="iconSize">
     <size>
-     <width>100</width>
-     <height>100</height>
+     <width>90</width>
+     <height>90</height>
     </size>
    </property>
    <property name="flat">
@@ -252,6 +261,9 @@ QSlider::sub-page:horizontal{
     </property>
     <property name="maximum">
      <number>100</number>
+    </property>
+    <property name="value">
+     <number>50</number>
     </property>
     <property name="orientation">
      <enum>Qt::Vertical</enum>

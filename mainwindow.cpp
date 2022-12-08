@@ -25,6 +25,10 @@ MainWindow::MainWindow(QWidget *parent)
     Set_Theme_Color(Root.value("Theme_Color").toString());
     Play_Interface->show();
     Search->show();
+    connect(Play_Interface,SIGNAL(Clicked_Icon()),Search,SLOT(Music_Data_Show()));
+    connect(Search,SIGNAL(Play_All()),Play_Interface,SLOT(Play_Number_Init()));
+    connect(Search,SIGNAL(Update_Music()),Play_Interface,SLOT(Update_Music_List()));
+
 }
 
 MainWindow::~MainWindow()
@@ -40,6 +44,7 @@ void MainWindow::on_Set_clicked()
 {
     Set = new SET();
     Set->show();
+    connect(Set,SIGNAL(Reboot_Signals()),this,SLOT(Reboot()));
 }
 
 void MainWindow::Set_Theme_Color(QString Color)
@@ -51,21 +56,22 @@ void MainWindow::Set_Theme_Color(QString Color)
 
 void MainWindow::on_Like_clicked()
 {
-    Search->Init_State();
     Search->Like_List_Show();
-    Play_Interface->Play_State(Search->Return_State());
 }
 
 
 void MainWindow::on_Play_clicked()
 {
-    Search->Init_State();
     Search->Play_List_Show();
-    Play_Interface->Play_State(Search->Return_State());
 }
 
 
 void MainWindow::on_Room_clicked()
 {
     Search->Chat_Room_Show();
+}
+
+void MainWindow::Reboot()
+{
+    qApp->exit(REBOOT);
 }
