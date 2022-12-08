@@ -8,7 +8,8 @@
         "获取搜索内容":"https://music.163.com/api/search/get/web?csrf_token=hlpretag=&hlposttag=&s=/*搜索内容*/&type=1&offset=0&total=true&limit=10",
         "歌曲":"http://music.163.com/api/song/enhance/player/url?id=/*歌曲ID*/&ids=[/*歌曲ID*/]&br=3200000",
         "歌词":"http://music.163.com/api/song/media?id=/*歌曲ID*/",
-        "推荐歌单":"http://music.cyrilstudio.top/personalized?limit=10"
+        "推荐歌单":"http://music.cyrilstudio.top/personalized?limit=10",
+        "获取歌曲详情":"https://tenapi.cn/wyyinfo/?id=/*歌曲ID*/"
     }
 
     {

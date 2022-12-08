@@ -1,8 +1,8 @@
 #ifndef SERVER_H
 #define SERVER_H
 
-#define SERVER_IP       "47.99.61.145"  //服务器IP地址
-#define SERVER_PORT     2005            //服务器端口号
+#define SERVER_IP      "1.1.1.1"      //服务器IP地址
+#define SERVER_PORT    0000           //服务器端口号
 
 #include <QObject>
 #include <QMessageBox>
