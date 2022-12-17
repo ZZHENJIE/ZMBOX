@@ -18,21 +18,21 @@ set(PROJECT_SOURCES
         main.cpp
         mainwindow.cpp
         set.cpp
-        play_interface.cpp
+        play.cpp
         search.cpp
         mthread.cpp
         server.cpp
 
         mainwindow.h
         set.h
-        play_interface.h
+        play.h
         search.h
         mthread.h
         server.h
 
         mainwindow.ui
         set.ui
-        play_interface.ui
+        play.ui
         search.ui
 
         Resources.qrc

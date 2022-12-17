@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>PLAY_INTERFACE</class>
- <widget class="QWidget" name="PLAY_INTERFACE">
+ <class>PLAY</class>
+ <widget class="QWidget" name="PLAY">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -23,13 +23,7 @@
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true">QSlider::groove:horizontal{ 
-		height: 12px; 
-		left: 0px; 
-		right: 0px; 
-		background:rgba(0,0,0,150);
- } 
- QSlider::handle:horizontal{ 
+    <string notr="true">QSlider::handle:horizontal{ 
 		width:  30px; 
 		height: 30px; 
 		margin-top: -10px; 
@@ -40,7 +34,13 @@
 } 
 QSlider::sub-page:horizontal{
 	   background:rgba(80,166,234,150);
-}</string>
+}
+QSlider::groove:horizontal{ 
+		height: 12px; 
+		left: 0px;
+		right: 0px; 
+		background:rgba(0,0,0,150);
+ } </string>
    </property>
    <property name="maximum">
     <number>100</number>
@@ -255,7 +255,6 @@ QSlider::sub-page:horizontal{
     </property>
     <property name="styleSheet">
      <string notr="true">QSlider::handle:vertical{ 
-		
  		border-image:url(:/Resource/Rect.png);
 } </string>
     </property>

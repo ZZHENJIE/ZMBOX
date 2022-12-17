@@ -28,7 +28,7 @@
    <property name="styleSheet">
     <string notr="true"/>
    </property>
-   <widget class="QPushButton" name="PushButton">
+   <widget class="QPushButton" name="Search_Button">
     <property name="geometry">
      <rect>
       <x>1100</x>
@@ -57,7 +57,7 @@
      <bool>false</bool>
     </property>
    </widget>
-   <widget class="QLineEdit" name="Text">
+   <widget class="QLineEdit" name="Search_Text">
     <property name="geometry">
      <rect>
       <x>339</x>
@@ -82,7 +82,7 @@
      <string>请输入搜索内容</string>
     </property>
    </widget>
-   <widget class="QComboBox" name="Select">
+   <widget class="QComboBox" name="Select_Platform">
     <property name="geometry">
      <rect>
       <x>110</x>
@@ -110,7 +110,7 @@
      </size>
     </property>
    </widget>
-   <widget class="QPushButton" name="Back">
+   <widget class="QPushButton" name="Back_Button">
     <property name="geometry">
      <rect>
       <x>20</x>
@@ -153,7 +153,7 @@
     <enum>Qt::Horizontal</enum>
    </property>
   </widget>
-  <widget class="QListWidget" name="Music_List">
+  <widget class="QListWidget" name="Search_Music_List">
    <property name="geometry">
     <rect>
      <x>5</x>
@@ -166,7 +166,7 @@
     <string notr="true"/>
    </property>
   </widget>
-  <widget class="QWidget" name="EverDayMusic" native="true">
+  <widget class="QWidget" name="Recommended_Playlist" native="true">
    <property name="geometry">
     <rect>
      <x>5</x>
@@ -561,7 +561,7 @@
      <height>500</height>
     </rect>
    </property>
-   <widget class="QPushButton" name="Play_All">
+   <widget class="QPushButton" name="Play_All_Button">
     <property name="geometry">
      <rect>
       <x>0</x>
@@ -580,7 +580,7 @@
      <string>播放全部</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="Delete">
+   <widget class="QPushButton" name="Delete_Button">
     <property name="geometry">
      <rect>
       <x>150</x>
@@ -599,7 +599,7 @@
      <string>删除歌曲</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="Download">
+   <widget class="QPushButton" name="Download_Button">
     <property name="geometry">
      <rect>
       <x>300</x>
@@ -628,7 +628,7 @@
      </rect>
     </property>
    </widget>
-   <widget class="QPushButton" name="Add_Like">
+   <widget class="QPushButton" name="Add_Like_Button">
     <property name="geometry">
      <rect>
       <x>450</x>
@@ -644,7 +644,7 @@
      </font>
     </property>
     <property name="text">
-     <string>添加到收藏</string>
+     <string>添加到喜欢</string>
     </property>
    </widget>
   </widget>
@@ -657,7 +657,7 @@
      <height>500</height>
     </rect>
    </property>
-   <widget class="QListWidget" name="Message">
+   <widget class="QListWidget" name="Message_List">
     <property name="geometry">
      <rect>
       <x>0</x>
@@ -667,7 +667,7 @@
      </rect>
     </property>
    </widget>
-   <widget class="QPushButton" name="Send">
+   <widget class="QPushButton" name="Send_Button">
     <property name="geometry">
      <rect>
       <x>1060</x>
@@ -686,7 +686,7 @@
      <string>发送</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="Input">
+   <widget class="QLineEdit" name="Input_Text">
     <property name="geometry">
      <rect>
       <x>0</x>
@@ -705,7 +705,7 @@
      <string/>
     </property>
    </widget>
-   <widget class="QPushButton" name="Clear">
+   <widget class="QPushButton" name="Clear_Button">
     <property name="geometry">
      <rect>
       <x>1060</x>
@@ -725,10 +725,10 @@
     </property>
    </widget>
   </widget>
-  <zorder>Music_List</zorder>
+  <zorder>Search_Music_List</zorder>
   <zorder>Search</zorder>
   <zorder>line</zorder>
-  <zorder>EverDayMusic</zorder>
+  <zorder>Recommended_Playlist</zorder>
   <zorder>Play_Like</zorder>
   <zorder>Chat_Room</zorder>
  </widget>

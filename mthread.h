@@ -15,9 +15,8 @@
 class MThread : public QThread
 {
     public:
-        MThread(){};
-        ~MThread(){};
-        void CloseThread();
+        MThread(){};//构造函数
+        ~MThread(){};//析构函数
         virtual void run(QString Download_Url,int Platform,QString Music_Name,QString Singer_Name);//Platform:0 网易云音乐 1 酷狗音乐 2 QQ音乐
 };
 

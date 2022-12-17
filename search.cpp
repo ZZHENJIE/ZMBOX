@@ -3,29 +3,30 @@
 
 SEARCH::SEARCH(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::SEARCH)
+    ui(new Ui::SEARCH)//构造函数
 {
     ui->setupUi(this);
     this->move(100,0);
-    Download_Thread = new MThread();
-    ui->Music_List->setVisible(false);
-    ui->Play_Like->setVisible(false);
-    ui->Chat_Room->setVisible(false);
-    ui->EverDayMusic->setVisible(true);
 
+    ui->Play_Like->setVisible(false);//设置喜欢列表播放列表窗体可用性
+    ui->Search_Music_List->setVisible(false);//设置搜索列表窗体可用性
+    ui->Recommended_Playlist->setVisible(true);//设置推荐歌单窗体可用性
+    ui->Chat_Room->setVisible(false);//设置聊天室窗体可用性
+
+    Get_Recommended_Playlist();//推荐歌单
+
+    Download_Thread = new MThread();//创建下载线程和服务器类
     Server = new SERVER();
 
-    Get_Ever_Day_Music();
-
-    Data_Json->open(QFile::ReadOnly);
+    Data_Json->open(QFile::ReadOnly);//获取和设置用户名
     QJsonDocument Temp_Json = QJsonDocument::fromJson(QByteArray(Data_Json->readAll()));
     Data_Json->close();
-    User_Name = Temp_Json.object().value("QQ_Name").toString();
+    Server->User_Name = Temp_Json.object().value("QQ_Name").toString();
 
-    connect(Server,SIGNAL(Server_Send_Signals()),this,SLOT(Server_Send()));
+    connect(Server,SIGNAL(Server_Send_Signals()),this,SLOT(Server_Send()));//连接服务器发送信号
 }
 
-SEARCH::~SEARCH()
+SEARCH::~SEARCH()//析构函数
 {
     delete Server;
     delete Data_Json;
@@ -35,21 +36,149 @@ SEARCH::~SEARCH()
     delete Download_Thread;
 }
 
-void SEARCH::on_PushButton_clicked()
+void SEARCH::Set_Theme_Color(QString Color)//设置主题颜色函数
 {
-    if(!ui->Text->text().isEmpty())
+    //搜索栏
+    ui->Search_Button->setStyleSheet("background-color: rgba(" + Color + ");border-radius: 10px;");
+    ui->Back_Button->setStyleSheet("background-color: rgba(" + Color + ");border-radius: 10px;");
+    ui->Search_Text->setStyleSheet("background-color: rgba(" + Color + ");border-radius: 10px;color:white;");
+    //平台选择
+    ui->Select_Platform->addItem(QIcon(":/Resource/Cloud.png"),"网易云音乐");
+    ui->Select_Platform->addItem(QIcon(":/Resource/KuGou.png"),"酷狗音乐");
+    ui->Select_Platform->addItem(QIcon(":/Resource/QQ.png"),"QQ音乐");
+    ui->Select_Platform->setStyleSheet(
+    "QComboBox {background-color: rgba(" + Color + ");border-radius: 10px;color:white;}" +
+    "QComboBox QAbstractItemView{background-color: rgba(" + Color + ");border-radius: 10px;color:white;font: 20pt '楷体';icon-size: 50pt}" +
+    "QComboBox QAbstractItemView::item {min-height: 60px;}QComboBox::drop-down{border-style: none;}"
+    );
+    ui->Select_Platform->view()->window()->setWindowFlags(Qt::Popup | Qt::FramelessWindowHint | Qt::NoDropShadowWindowHint);
+    ui->Select_Platform->view()->window()->setAttribute(Qt::WA_TranslucentBackground);
+    //搜索结果列表
+    ui->Search_Music_List->setStyleSheet("background-color: rgba(" + Color + ");border-radius: 10px;color:white;font: 15pt '楷体';");
+    //推荐歌单
+    ui->Recommended_Playlist->setStyleSheet("background-color: rgba(0,0,0,0);");
+    //其他
+    ui->line->setStyleSheet("background-color: rgba(" + Color + ");");
+    //推荐歌单
+    ui->List_0->setStyleSheet("background-color: rgba(" + Color + ");border-radius: 8px;");
+    ui->List_1->setStyleSheet("background-color: rgba(" + Color + ");border-radius: 8px;");
+    ui->List_2->setStyleSheet("background-color: rgba(" + Color + ");border-radius: 8px;");
+    ui->List_3->setStyleSheet("background-color: rgba(" + Color + ");border-radius: 8px;");
+    ui->List_4->setStyleSheet("background-color: rgba(" + Color + ");border-radius: 8px;");
+    ui->List_5->setStyleSheet("background-color: rgba(" + Color + ");border-radius: 8px;");
+    ui->List_6->setStyleSheet("background-color: rgba(" + Color + ");border-radius: 8px;");
+    ui->List_7->setStyleSheet("background-color: rgba(" + Color + ");border-radius: 8px;");
+    ui->List_8->setStyleSheet("background-color: rgba(" + Color + ");border-radius: 8px;");
+    ui->List_9->setStyleSheet("background-color: rgba(" + Color + ");border-radius: 8px;");
+    //播放列表-喜欢列表
+    ui->Add_Like_Button->setStyleSheet("background-color: rgba(" + Color + ");border-radius: 5px;color:white;");
+    ui->Delete_Button->setStyleSheet("background-color: rgba(" + Color + ");border-radius: 5px;color:white;");
+    ui->Download_Button->setStyleSheet("background-color: rgba(" + Color + ");border-radius: 5px;color:white;");
+    ui->Play_All_Button->setStyleSheet("background-color: rgba(" + Color + ");border-radius: 5px;color:white;");
+    ui->Like_Play_List->setStyleSheet("background-color: rgba(" + Color + ");border-radius: 8px;color:white;font: 15pt '楷体';");
+    //聊天室
+    ui->Message_List->setStyleSheet("background-color: rgba(" + Color + ");border-radius: 8px;color:white;font: 15pt '楷体';");
+    ui->Send_Button->setStyleSheet("background-color: rgba(" + Color + ");border-radius: 8px;");
+    ui->Clear_Button->setStyleSheet("background-color: rgba(" + Color + ");border-radius: 8px;");
+    ui->Input_Text->setStyleSheet("background-color: rgba(" + Color + ");border-radius: 8px;color:white;");
+}
+
+void SEARCH::Play_List_Show()//显示播放列表函数
+{
+    ui->Like_Play_List->clear();//清空列表信息
+    ui->Play_Like->setVisible(true);//设置喜欢列表播放列表窗体可用性
+    ui->Search_Music_List->setVisible(false);//设置搜索列表窗体可用性
+    ui->Recommended_Playlist->setVisible(false);//设置推荐歌单窗体可用性
+    ui->Chat_Room->setVisible(false);//设置聊天室窗体可用性
+    ui->Add_Like_Button->setVisible(true);//因为播放列表没有添加至喜欢列表按钮,所以设置喜欢按钮的可用性
+
+    Play_Json->open(QFile::ReadOnly);//打开播放Json文件
+    QJsonDocument Temp_Json = QJsonDocument::fromJson(QByteArray(Play_Json->readAll()));//读取Json文件信息
+    Play_Json->close();//Json文件关闭
+
+    QJsonArray Root = Temp_Json.array();//储存Json数组
+
+    for(int i = 0; i < Root.count();i++)//遍历数组
     {
-        ui->Music_List->clear();
-        ui->Music_List->setVisible(true);
-        ui->EverDayMusic->setVisible(false);
-        ui->Play_Like->setVisible(false);
-        switch(ui->Select->currentIndex())
+        QListWidgetItem *Item = new QListWidgetItem();
+        Item->setSizeHint(QSize(1160,50));//设置每行宽高
+        Item->setText(Root.at(i).toObject().value("Music_Name").toString()+"       "+Root.at(i).toObject().value("Singer_Name").toString());//设置每行文本
+        if(Root.at(i).toObject().value("Platform").toString() == "W")//判断音乐平台
+        {
+            Item->setIcon(QIcon(":/Resource/Cloud.png"));
+        }
+        else if(Root.at(i).toObject().value("Platform").toString() == "K")
+        {
+            Item->setIcon(QIcon(":/Resource/KuGou.png"));
+        }
+        else if(Root.at(i).toObject().value("Platform").toString() == "Q")
+        {
+            Item->setIcon(QIcon(":/Resource/QQ.png"));
+        }
+        ui->Like_Play_List->addItem(Item);//添加至列表
+    }
+}
+
+void SEARCH::Like_List_Show()//显示喜欢列表函数
+{
+    ui->Like_Play_List->clear();//清空列表信息
+    ui->Play_Like->setVisible(true);//设置喜欢列表播放列表窗体可用性
+    ui->Search_Music_List->setVisible(false);//设置搜索列表窗体可用性
+    ui->Recommended_Playlist->setVisible(false);//设置推荐歌单窗体可用性
+    ui->Chat_Room->setVisible(false);//设置聊天室窗体可用性
+    ui->Add_Like_Button->setVisible(false);//因为播放列表没有添加至喜欢列表按钮,所以设置喜欢按钮的可用性
+
+    Like_Json->open(QFile::ReadOnly);//打开播放Json文件
+    QJsonDocument Temp_Json = QJsonDocument::fromJson(QByteArray(Like_Json->readAll()));//读取Json文件信息
+    Like_Json->close();//Json文件关闭
+
+    QJsonArray Root = Temp_Json.array();//储存Json数组
+
+    for(int i = 0; i < Root.count();i++)//遍历数组
+    {
+        QListWidgetItem *Item = new QListWidgetItem();
+        Item->setSizeHint(QSize(1160,50));//设置每行宽高
+        Item->setText(Root.at(i).toObject().value("Music_Name").toString()+"       "+Root.at(i).toObject().value("Singer_Name").toString());//设置文本
+        if(Root.at(i).toObject().value("Platform").toString() == "W")//判断音乐平台
+        {
+            Item->setIcon(QIcon(":/Resource/Cloud.png"));
+        }
+        else if(Root.at(i).toObject().value("Platform").toString() == "K")
+        {
+            Item->setIcon(QIcon(":/Resource/KuGou.png"));
+        }
+        else if(Root.at(i).toObject().value("Platform").toString() == "Q")
+        {
+            Item->setIcon(QIcon(":/Resource/QQ.png"));
+        }
+        ui->Like_Play_List->addItem(Item);//添加至列表
+    }
+}
+
+void SEARCH::Chat_Room_Show()//显示聊天室函数
+{
+    ui->Play_Like->setVisible(false);//设置喜欢列表播放列表窗体可用性
+    ui->Search_Music_List->setVisible(false);//设置搜索列表窗体可用性
+    ui->Recommended_Playlist->setVisible(false);//设置推荐歌单窗体可用性
+    ui->Chat_Room->setVisible(true);//设置聊天室窗体可用性
+}
+
+void SEARCH::on_Search_Button_clicked()//搜索按钮点击槽函数
+{
+    if(!ui->Search_Text->text().isEmpty())
+    {
+        ui->Search_Music_List->clear();//清空列表信息
+        ui->Play_Like->setVisible(false);//设置喜欢列表播放列表窗体可用性
+        ui->Search_Music_List->setVisible(true);//设置搜索列表窗体可用性
+        ui->Recommended_Playlist->setVisible(false);//设置推荐歌单窗体可用性
+        ui->Chat_Room->setVisible(false);//设置聊天室窗体可用性
+        switch(ui->Select_Platform->currentIndex())
         {
             case 0://网易云
             {
                 //获取搜索结果
                 QNetworkAccessManager *Manager = new QNetworkAccessManager();
-                QNetworkReply *Reply = Manager->get(QNetworkRequest(QUrl("http://music.163.com/api/search/get/web?csrf_token=hlpretag=&hlposttag=&s=" + ui->Text->text() + "&type=1&offset=0&total=true&limit=10")));
+                QNetworkReply *Reply = Manager->get(QNetworkRequest(QUrl("http://music.163.com/api/search/get/web?csrf_token=hlpretag=&hlposttag=&s=" + ui->Search_Text->text() + "&type=1&offset=0&total=true&limit=10")));
                 QEventLoop EventLoop;
                 connect(Manager, SIGNAL(finished(QNetworkReply*)), &EventLoop, SLOT(quit()));
                 EventLoop.exec();
@@ -99,11 +228,11 @@ void SEARCH::on_PushButton_clicked()
                 }
                 break;
             }
-            case 1://QQ
+            case 1://酷狗
             {
                 //获取搜索结果
                 QNetworkAccessManager *Manager = new QNetworkAccessManager();
-                QNetworkReply *Reply = Manager->get(QNetworkRequest(QUrl("http://mobilecdn.kugou.com/api/v3/search/song?keyword=" + ui->Text->text() + "&page=1&pagesize=10")));
+                QNetworkReply *Reply = Manager->get(QNetworkRequest(QUrl("http://mobilecdn.kugou.com/api/v3/search/song?keyword=" + ui->Search_Text->text() + "&page=1&pagesize=10")));
                 QEventLoop EventLoop;
                 connect(Manager, SIGNAL(finished(QNetworkReply*)), &EventLoop, SLOT(quit()));
                 EventLoop.exec();
@@ -144,7 +273,7 @@ void SEARCH::on_PushButton_clicked()
                 }
                 break;
             }
-            case 2://酷狗
+            case 2://QQ
             {
                 for(int i = 0; i < Music_Max_Number;i++)
                 {
@@ -159,70 +288,69 @@ void SEARCH::on_PushButton_clicked()
             QListWidgetItem *Item = new QListWidgetItem;
             Item->setSizeHint(QSize(1160,50));//设置每行宽高
             Item->setText(Music_Name[i]+"       "+Singer_Name[i]);//设置文本
-            ui->Music_List->addItem(Item);//添加至列表
+            ui->Search_Music_List->addItem(Item);//添加至列表
         }
     }
 }
 
-
-void SEARCH::on_Music_List_itemClicked(QListWidgetItem *item)
+void SEARCH::on_Search_Music_List_itemClicked(QListWidgetItem *item)//搜索音乐列表点击槽函数
 {
-    int Item_Number = ui->Music_List->currentRow();
-    switch(ui->Select->currentIndex())
+    int Item_Number = ui->Search_Music_List->currentRow();//获取点击列表序号
+    switch(ui->Select_Platform->currentIndex())//判断搜索平台
     {
         case 0://网易云音乐
         {
-            Play_Json->open(QFile::ReadOnly);
+            Play_Json->open(QFile::ReadOnly);//获取播放列表内的信息
             QJsonDocument Temp_Json = QJsonDocument::fromJson(QByteArray(Play_Json->readAll()));
             Play_Json->close();
-            QJsonArray Root = Temp_Json.array();
-            bool Find_Music = true;
-            for(int i = 0; i < Root.count(); i++)
+            QJsonArray Root = Temp_Json.array();//储存播放列表信息
+            bool Find_Music = true;//查找相同歌曲
+            for(int i = 0; i < Root.count(); i++)//判断播放列表内是否有相同歌曲
             {
                 if(Root.at(i).toObject().value("Music_Id").toString() == Cloud_Music_Id[Item_Number])
                 {
-                    Find_Music = false;
+                    Find_Music = false;//有相同歌曲不需要再次存储
                     break;
                 }
             }
-            if(Find_Music == true)
+            if(Find_Music == true)//没有相同歌曲时储存歌曲信息
             {
-                Play_Json->open(QFile::WriteOnly);
+                Play_Json->open(QFile::WriteOnly);//打开文件
 
-                QJsonObject Data;
+                QJsonObject Data;//需要储存的歌曲信息对象
                 Data.insert("Platform","W");
                 Data.insert("Music_Id",Cloud_Music_Id[Item_Number]);
                 Data.insert("Music_Name",Music_Name[Item_Number]);
                 Data.insert("Singer_Name",Singer_Name[Item_Number]);
 
-                Root.append(Data);
+                Root.append(Data);//添加到原有的Json数组尾部
 
-                Temp_Json.setArray(Root);
-                Play_Json->write(QByteArray(Temp_Json.toJson()));
-                Play_Json->close();
+                Temp_Json.setArray(Root);//把Root信息给Temp_Json
+                Play_Json->write(QByteArray(Temp_Json.toJson()));//把信息写入(清空写入)播放列表
+                Play_Json->close();//关闭文件
             }
             break;
         }
         case 1://酷狗音乐
         {
-            Play_Json->open(QFile::ReadOnly);
+            Play_Json->open(QFile::ReadOnly);//获取播放列表内的信息
             QJsonDocument Temp_Json = QJsonDocument::fromJson(QByteArray(Play_Json->readAll()));
             Play_Json->close();
-            QJsonArray Root = Temp_Json.array();
-            bool Find_Music = true;
-            for(int i = 0; i < Root.count(); i++)
+            QJsonArray Root = Temp_Json.array();//储存播放列表信息
+            bool Find_Music = true;//查找相同歌曲
+            for(int i = 0; i < Root.count(); i++)//判断播放列表内是否有相同歌曲
             {
                 if(Root.at(i).toObject().value("Album_Id").toString() == Kugou_Album_Id[Item_Number] && Root.at(i).toObject().value("Album_Audio_Id").toString() == Kugou_Album_Audio_Id[Item_Number])
                 {
-                    Find_Music = false;
+                    Find_Music = false;//有相同歌曲不需要再次存储
                     break;
                 }
             }
-            if(Find_Music == true)
+            if(Find_Music == true)//没有相同歌曲时储存歌曲信息
             {
-                Play_Json->open(QFile::WriteOnly);
+                Play_Json->open(QFile::WriteOnly);//打开文件
 
-                QJsonObject Data;
+                QJsonObject Data;//需要储存的歌曲信息对象
                 Data.insert("Platform","K");
                 Data.insert("Music_Hash",Kugou_Music_Hash[Item_Number]);
                 Data.insert("Album_Id",Kugou_Album_Id[Item_Number]);
@@ -230,11 +358,11 @@ void SEARCH::on_Music_List_itemClicked(QListWidgetItem *item)
                 Data.insert("Music_Name",Music_Name[Item_Number]);
                 Data.insert("Singer_Name",Singer_Name[Item_Number]);
 
-                Root.append(Data);
+                Root.append(Data);//添加到原有的Json数组尾部
 
-                Temp_Json.setArray(Root);
-                Play_Json->write(QByteArray(Temp_Json.toJson()));
-                Play_Json->close();
+                Temp_Json.setArray(Root);//把Root信息给Temp_Json
+                Play_Json->write(QByteArray(Temp_Json.toJson()));//把信息写入(清空写入)播放列表
+                Play_Json->close();//关闭文件
             }
             break;
         }
@@ -245,59 +373,192 @@ void SEARCH::on_Music_List_itemClicked(QListWidgetItem *item)
     }
     Update_Music();
 }
-void SEARCH::Set_Theme_Color(QString Color)
+
+void SEARCH::on_Back_Button_clicked()//点击返回主页槽函数
 {
-    ui->PushButton->setStyleSheet("background-color: rgba(" + Color + ");border-radius: 10px;");
-    ui->Back->setStyleSheet("background-color: rgba(" + Color + ");border-radius: 10px;");
-    ui->Text->setStyleSheet("background-color: rgba(" + Color + ");border-radius: 10px;color:white;");
-    ui->Music_List->setStyleSheet("background-color: rgba(" + Color + ");border-radius: 10px;color:white;font: 15pt '楷体';");
-    ui->EverDayMusic->setStyleSheet("background-color: rgba(0,0,0,0);");
-    ui->line->setStyleSheet("background-color: rgba(" + Color + ");");
-
-    ui->Select->setView(new QListView());
-    ui->Select->setStyleSheet(
-    "QComboBox {background-color: rgba(" + Color + ");border-radius: 10px;color:white;}" +
-    "QComboBox QAbstractItemView{background-color: rgba(" + Color + ");border-radius: 10px;color:white;font: 20pt '楷体';icon-size: 50pt}" +
-    "QComboBox QAbstractItemView::item {min-height: 60px;}QComboBox::drop-down{border-style: none;}"
-    );
-    ui->Select->view()->window()->setWindowFlags(Qt::Popup | Qt::FramelessWindowHint | Qt::NoDropShadowWindowHint);
-    ui->Select->view()->window()->setAttribute(Qt::WA_TranslucentBackground);
-    qApp->setEffectEnabled(Qt::UI_AnimateCombo, false);//去掉弹窗动画
-
-    ui->Select->addItem(QIcon(":/Resource/Cloud.png"),"网易云音乐");ui->Select->addItem(QIcon(":/Resource/KuGou.png"),"酷狗音乐");ui->Select->addItem(QIcon(":/Resource/QQ.png"),"QQ音乐");
-
-    ui->List_0->setStyleSheet("background-color: rgba(" + Color + ");border-radius: 8px;");
-    ui->List_1->setStyleSheet("background-color: rgba(" + Color + ");border-radius: 8px;");
-    ui->List_2->setStyleSheet("background-color: rgba(" + Color + ");border-radius: 8px;");
-    ui->List_3->setStyleSheet("background-color: rgba(" + Color + ");border-radius: 8px;");
-    ui->List_4->setStyleSheet("background-color: rgba(" + Color + ");border-radius: 8px;");
-    ui->List_5->setStyleSheet("background-color: rgba(" + Color + ");border-radius: 8px;");
-    ui->List_6->setStyleSheet("background-color: rgba(" + Color + ");border-radius: 8px;");
-    ui->List_7->setStyleSheet("background-color: rgba(" + Color + ");border-radius: 8px;");
-    ui->List_8->setStyleSheet("background-color: rgba(" + Color + ");border-radius: 8px;");
-    ui->List_9->setStyleSheet("background-color: rgba(" + Color + ");border-radius: 8px;");
-
-    ui->Add_Like->setStyleSheet("background-color: rgba(" + Color + ");border-radius: 5px;color:white;");
-    ui->Delete->setStyleSheet("background-color: rgba(" + Color + ");border-radius: 5px;color:white;");
-    ui->Download->setStyleSheet("background-color: rgba(" + Color + ");border-radius: 5px;color:white;");
-    ui->Play_All->setStyleSheet("background-color: rgba(" + Color + ");border-radius: 5px;color:white;");
-    ui->Like_Play_List->setStyleSheet("background-color: rgba(" + Color + ");border-radius: 8px;color:white;font: 15pt '楷体';");
-
-    ui->Message->setStyleSheet("background-color: rgba(" + Color + ");border-radius: 8px;color:white;font: 15pt '楷体';");
-    ui->Send->setStyleSheet("background-color: rgba(" + Color + ");border-radius: 8px;");
-    ui->Clear->setStyleSheet("background-color: rgba(" + Color + ");border-radius: 8px;");
-    ui->Input->setStyleSheet("background-color: rgba(" + Color + ");border-radius: 8px;color:white;");
-}
-void SEARCH::on_Back_clicked()
-{
-    ui->Music_List->setVisible(false);
-    ui->Play_Like->setVisible(false);
-    ui->Chat_Room->setVisible(false);
-    ui->EverDayMusic->setVisible(true);
+    ui->Play_Like->setVisible(false);//设置喜欢列表播放列表窗体可用性
+    ui->Search_Music_List->setVisible(false);//设置搜索列表窗体可用性
+    ui->Recommended_Playlist->setVisible(true);//设置推荐歌单窗体可用性
+    ui->Chat_Room->setVisible(false);//设置聊天室窗体可用性
 }
 
-void SEARCH::Get_Ever_Day_Music()
+void SEARCH::on_Play_All_Button_clicked()//点击播放全部槽函数
 {
+    if(!ui->Add_Like_Button->isVisible())//判断是否为喜欢列表,把喜欢列表给播放列表
+    {
+        Like_Json->open(QFile::ReadOnly);
+        QJsonDocument Temp_Json = QJsonDocument::fromJson(QByteArray(Like_Json->readAll()));
+        Like_Json->close();
+
+        Play_Json->open(QFile::WriteOnly);
+        Play_Json->write(QByteArray(Temp_Json.toJson()));
+        Play_Json->close();
+    }
+    Play_All();
+}
+
+void SEARCH::on_Delete_Button_clicked()//点击删除歌单内歌曲槽函数
+{
+    if(ui->Add_Like_Button->isVisible())//判断是否为喜欢列表
+    {
+        Play_Json->open(QFile::ReadOnly);//获取列表信息
+        QJsonDocument Temp_Json = QJsonDocument::fromJson(QByteArray(Play_Json->readAll()));
+        Play_Json->close();
+        
+        QJsonArray Root = Temp_Json.array();//储存列表信息
+
+        Play_Json->open(QFile::WriteOnly);//编辑列表信息
+
+        Root.removeAt(ui->Like_Play_List->currentRow());//删除选中歌曲序号
+
+        Temp_Json.setArray(Root);//把Root信息给Temp_Json
+        Play_Json->write(QByteArray(Temp_Json.toJson()));//写入信息
+        Play_Json->close();//关闭
+
+        Play_List_Show();
+    }
+    else
+    {
+        Like_Json->open(QFile::ReadOnly);//获取列表信息
+        QJsonDocument Temp_Json = QJsonDocument::fromJson(QByteArray(Like_Json->readAll()));
+        Like_Json->close();
+        
+        QJsonArray Root = Temp_Json.array();//储存列表信息
+
+        Like_Json->open(QFile::WriteOnly);//编辑列表信息
+
+        Root.removeAt(ui->Like_Play_List->currentRow());//删除选中歌曲序号
+
+        Temp_Json.setArray(Root);//把Root信息给Temp_Json
+        Like_Json->write(QByteArray(Temp_Json.toJson()));//写入信息
+        Like_Json->close();//关闭
+
+        Like_List_Show();
+    }
+    Update_Music();
+}
+
+void SEARCH::on_Download_Button_clicked()//点击下载歌曲槽函数
+{
+    Download_Thread->start();//下载线程开始
+    if(!QDir("./Music").exists())//判断是否有储存歌曲文件夹
+    {
+        QDir Temp_Dir;
+        Temp_Dir.mkdir("./Music");//创建文件夹
+    }
+    if(ui->Add_Like_Button->isVisible())//判断是否为喜欢列表
+    {
+        Play_Json->open(QFile::ReadOnly);//读取列表信息
+        QJsonDocument Temp_Json = QJsonDocument::fromJson(QByteArray(Play_Json->readAll()));
+        Play_Json->close();
+        QJsonObject Root = Temp_Json.array().at(ui->Like_Play_List->currentRow()).toObject();//储存选择歌曲序号信息
+        if(Root.value("Platform").toString() == "W")//判断音乐平台
+        {
+            QString Download_Url = "http://music.163.com/api/song/enhance/player/url?id=" + Root.value("Music_Id").toString() + "&ids=[" + Root.value("Music_Id").toString() + "]&br=3200000";//下载链接
+            Download_Thread->run(Download_Url,0,Root.value("Music_Name").toString(),Root.value("Singer_Name").toString());//多线程下载
+        }
+        else if(Root.value("Platform").toString() == "K")
+        {
+            QString Download_Url = "https://wwwapi.kugou.com/yy/index.php?r=play/getdata&hash=" + Root.value("Music_Hash").toString() + "&album_id=" + Root.value("Album_Id").toString() + "&album_audio_id=" + Root.value("Album_Audio_Id").toString();//下载链接
+            Download_Thread->run(Download_Url,1,Root.value("Music_Name").toString(),Root.value("Singer_Name").toString());//多线程下载
+        }
+        else if(Root.value("Platform").toString() == "Q")
+        {
+            
+        }
+    }
+    else
+    {
+        Like_Json->open(QFile::ReadOnly);//读取列表信息
+        QJsonDocument Temp_Json = QJsonDocument::fromJson(QByteArray(Like_Json->readAll()));
+        Like_Json->close();
+        QJsonObject Root = Temp_Json.array().at(ui->Like_Play_List->currentRow()).toObject();//储存选择歌曲序号信息
+        if(Root.value("Platform").toString() == "W")//判断音乐平台
+        {
+            QString Download_Url = "http://music.163.com/api/song/enhance/player/url?id=" + Root.value("Music_Id").toString() + "&ids=" + Root.value("Music_Id").toString() + "&br=3200000";//下载链接
+            Download_Thread->run(Download_Url,0,Root.value("Music_Name").toString(),Root.value("Singer_Name").toString());//多线程下载
+        }
+        else if(Root.value("Platform").toString() == "K")
+        {
+            QString Download_Url = "https://wwwapi.kugou.com/yy/index.php?r=play/getdata&hash=" + Root.value("Music_Hash").toString() + "&album_id=" + Root.value("Album_Id").toString() + "&album_audio_id=" + Root.value("Album_Audio_Id").toString();//下载链接
+            Download_Thread->run(Download_Url,1,Root.value("Music_Name").toString(),Root.value("Singer_Name").toString());//多线程下载
+        }
+        else if(Root.value("Platform").toString() == "Q")
+        {
+            
+        }
+
+    }
+}
+
+void SEARCH::on_Add_Like_Button_clicked()//点击添加到喜欢列表槽函数
+{
+    Like_Json->open(QFile::ReadOnly);//读取喜欢列表信息
+    QJsonDocument Temp_Like_Json = QJsonDocument::fromJson(QByteArray(Like_Json->readAll()));
+    Like_Json->close();
+    
+    Play_Json->open(QFile::ReadOnly);//读取播放列表信息
+    QJsonDocument Temp_Play_Json = QJsonDocument::fromJson(QByteArray(Play_Json->readAll()));
+    Play_Json->close();
+
+    QJsonArray Play_Root = Temp_Play_Json.array();//储存喜欢列表信息
+    QJsonArray Like_Root = Temp_Like_Json.array();//储存播放列表信息
+
+    QJsonObject Add_Music = Play_Root.at(ui->Like_Play_List->currentRow()).toObject();//储存需要添加的Json歌曲对象
+
+    bool Find_Music = true;//查看喜欢列表是否有相同歌曲
+
+    for(int i = 0; i < Like_Root.count(); i ++)//遍历喜欢列表
+    {
+        if(Like_Root.at(i).toObject() == Add_Music)//判断是否相同
+        {
+            Find_Music = false;
+            break;
+        }
+    }
+
+    if(Find_Music == true)//如果没有相同歌曲就把Add_Music添加到喜欢列表
+    {
+        Like_Json->open(QFile::WriteOnly);
+        QJsonArray Root = Temp_Like_Json.array();
+        Root.append(Add_Music);
+        Temp_Like_Json.setArray(Root);
+        Like_Json->write(QByteArray(Temp_Like_Json.toJson()));
+        Like_Json->close();
+    }
+}
+
+void SEARCH::on_Send_Button_clicked()//点击发送信息给服务器槽函数
+{
+    if(ui->Input_Text->text().size() < 1024)//判断输入字符数据大小
+    {
+        Server->Client_Send(ui->Input_Text->text());
+    }
+    else
+    {
+        QMessageBox::information(0,"提示","输入字符过多");
+    }
+}
+
+void SEARCH::on_Clear_Button_clicked()//点击清除信息列表和输入框槽函数
+{
+    ui->Input_Text->clear();//清空输入框信息
+    ui->Message_List->clear();//清空信息列表信息
+}
+
+void SEARCH::Server_Send()//服务器发送信息槽函数
+{
+    ui->Message_List->addItem(Server->Data.data());//服务器发送信息给客户端
+}
+
+void SEARCH::Lyrics_Show()//显示歌词槽函数
+{
+    
+}
+
+void SEARCH::Get_Recommended_Playlist()//获取推荐歌单
+{
+    //获取推荐歌单Json
     QNetworkAccessManager *Manager = new QNetworkAccessManager();
     QNetworkReply *Reply = Manager->get(QNetworkRequest(QUrl("https://music.cyrilstudio.top/personalized?limit=10")));
     QEventLoop EventLoop;
@@ -315,20 +576,19 @@ void SEARCH::Get_Ever_Day_Music()
 
     for(int i = 0; i < 10; i++)
     {
-        Image[i] = List.at(i).toObject().value("picUrl").toString();
+        Image[i] = List.at(i).toObject().value("picUrl").toString();//储存图片下载链接
     }
 
     for(int i = 0;i < 10; i++)
     {
-        QFile Img(".\\Data\\List_png");
+        QFile Img(".\\Data\\List_png");//下载图片并保存
         Img.open(QFile::WriteOnly);
         Reply = Manager->get(QNetworkRequest(QUrl(Image[i])));
-        connect(Manager, SIGNAL(finished(QNetworkReply*)), &EventLoop, SLOT(quit()));
         EventLoop.exec();
         Img.write(Reply->readAll());
         Img.close();
 
-        switch(i)
+        switch(i)//遍历歌单按钮,设置按钮图片
         {
             case 0:
             {
@@ -382,262 +642,6 @@ void SEARCH::Get_Ever_Day_Music()
             }
         }
 
-        QFile::remove(".\\Data\\List_png");
-    }
-}
-
-
-void SEARCH::Play_List_Show()
-{
-    ui->Like_Play_List->clear();
-    ui->Play_Like->setVisible(true);
-    ui->Music_List->setVisible(false);
-    ui->EverDayMusic->setVisible(false);
-    ui->Chat_Room->setVisible(false);
-    ui->Add_Like->setVisible(true);
-
-    Play_Json->open(QFile::ReadOnly);
-    QJsonDocument Temp_Json = QJsonDocument::fromJson(QByteArray(Play_Json->readAll()));
-    QJsonArray Root = Temp_Json.array();
-
-    for(int i = 0; i < Root.count();i++)
-    {
-        QListWidgetItem *Item = new QListWidgetItem;
-        Item->setSizeHint(QSize(1160,50));//设置每行宽高
-        Item->setText(Root.at(i).toObject().value("Music_Name").toString()+"       "+Root.at(i).toObject().value("Singer_Name").toString());//设置文本
-        if(Root.at(i).toObject().value("Platform").toString() == "W")
-        {
-            Item->setIcon(QIcon(":/Resource/Cloud.png"));
-        }
-        else if(Root.at(i).toObject().value("Platform").toString() == "K")
-        {
-            Item->setIcon(QIcon(":/Resource/KuGou.png"));
-        }
-        else if(Root.at(i).toObject().value("Platform").toString() == "Q")
-        {
-
-        }
-        ui->Like_Play_List->addItem(Item);//添加至列表
-    }
-
-    Play_Json->close();
-}
-
-void SEARCH::Like_List_Show()
-{
-    ui->Like_Play_List->clear();
-    ui->Play_Like->setVisible(true);
-    ui->Music_List->setVisible(false);
-    ui->EverDayMusic->setVisible(false);
-    ui->Chat_Room->setVisible(false);
-    ui->Add_Like->setVisible(false);
-
-    Like_Json->open(QFile::ReadOnly);
-    QJsonDocument Temp_Json = QJsonDocument::fromJson(QByteArray(Like_Json->readAll()));
-    QJsonArray Root = Temp_Json.array();
-
-    for(int i = 0; i < Root.count();i++)
-    {
-        QListWidgetItem *Item = new QListWidgetItem;
-        Item->setSizeHint(QSize(1160,50));//设置每行宽高
-        Item->setText(Root.at(i).toObject().value("Music_Name").toString()+"       "+Root.at(i).toObject().value("Singer_Name").toString());//设置文本
-        if(Root.at(i).toObject().value("Platform").toString() == "W")
-        {
-            Item->setIcon(QIcon(":/Resource/Cloud.png"));
-        }
-        else if(Root.at(i).toObject().value("Platform").toString() == "K")
-        {
-            Item->setIcon(QIcon(":/Resource/KuGou.png"));
-        }
-        else if(Root.at(i).toObject().value("Platform").toString() == "Q")
-        {
-
-        }
-        ui->Like_Play_List->addItem(Item);//添加至列表
-    }
-
-    Like_Json->close();
-}
-
-void SEARCH::on_Play_All_clicked()
-{
-    if(!ui->Add_Like->isVisible())
-    {
-        Like_Json->open(QFile::ReadOnly);
-        QJsonDocument Temp_Json = QJsonDocument::fromJson(QByteArray(Like_Json->readAll()));
-        Like_Json->close();
-
-        Play_Json->open(QFile::WriteOnly);
-        Play_Json->write(QByteArray(Temp_Json.toJson()));
-        Play_Json->close();
-    }
-    Play_All();
-}
-
-
-void SEARCH::on_Delete_clicked()
-{
-    if(ui->Add_Like->isVisible())
-    {
-        Play_Json->open(QFile::ReadOnly);
-        QJsonDocument Temp_Json = QJsonDocument::fromJson(QByteArray(Play_Json->readAll()));
-        Play_Json->close();
-        Play_Json->open(QFile::WriteOnly);
-        QJsonArray Root = Temp_Json.array();
-
-        Root.removeAt(ui->Like_Play_List->currentRow());
-
-        Temp_Json.setArray(Root);
-        Play_Json->write(QByteArray(Temp_Json.toJson()));
-        Play_Json->close();
-
-        Play_List_Show();
-    }
-    else
-    {
-        Like_Json->open(QFile::ReadOnly);
-        QJsonDocument Temp_Json = QJsonDocument::fromJson(QByteArray(Like_Json->readAll()));
-        Like_Json->close();
-        Like_Json->open(QFile::WriteOnly);
-        QJsonArray Root = Temp_Json.array();
-
-        Root.removeAt(ui->Like_Play_List->currentRow());
-
-        Temp_Json.setArray(Root);
-        Like_Json->write(QByteArray(Temp_Json.toJson()));
-        Like_Json->close();
-
-        Like_List_Show();
-    }
-    Update_Music();
-}
-
-
-void SEARCH::on_Download_clicked()
-{
-    Download_Thread->start();
-    if(!QDir("./Music").exists())
-    {
-        QDir Temp_Dir;
-        Temp_Dir.mkdir("./Music");//创建文件夹
-    }
-    if(ui->Add_Like->isVisible())
-    {
-        Play_Json->open(QFile::ReadOnly);
-        QJsonDocument Temp_Json = QJsonDocument::fromJson(QByteArray(Play_Json->readAll()));
-        Play_Json->close();
-        QJsonObject Root = Temp_Json.array().at(ui->Like_Play_List->currentRow()).toObject();
-        if(Root.value("Platform").toString() == "W")
-        {
-            QString Download_Url = "http://music.163.com/api/song/enhance/player/url?id=" + Root.value("Music_Id").toString() + "&ids=[" + Root.value("Music_Id").toString() + "]&br=3200000";
-            Download_Thread->run(Download_Url,0,Root.value("Music_Name").toString(),Root.value("Singer_Name").toString());
-        }
-        else if(Root.value("Platform").toString() == "K")
-        {
-            QString Download_Url = "https://wwwapi.kugou.com/yy/index.php?r=play/getdata&hash=" + Root.value("Music_Hash").toString() + "&album_id=" + Root.value("Album_Id").toString() + "&album_audio_id=" + Root.value("Album_Audio_Id").toString();
-            Download_Thread->run(Download_Url,1,Root.value("Music_Name").toString(),Root.value("Singer_Name").toString());
-        }
-        else if(Root.value("Platform").toString() == "Q")
-        {
-            
-        }
-    }
-    else
-    {
-        Like_Json->open(QFile::ReadOnly);
-        QJsonDocument Temp_Json = QJsonDocument::fromJson(QByteArray(Like_Json->readAll()));
-        Like_Json->close();
-        QJsonObject Root = Temp_Json.array().at(ui->Like_Play_List->currentRow()).toObject();
-        if(Root.value("Platform").toString() == "W")
-        {
-            QString Download_Url = "http://music.163.com/api/song/enhance/player/url?id=" + Root.value("Music_Id").toString() + "&ids=" + Root.value("Music_Id").toString() + "&br=3200000";
-            Download_Thread->run(Download_Url,0,Root.value("Music_Name").toString(),Root.value("Singer_Name").toString());
-        }
-        else if(Root.value("Platform").toString() == "K")
-        {
-            QString Download_Url = "https://wwwapi.kugou.com/yy/index.php?r=play/getdata&hash=" + Root.value("Music_Hash").toString() + "&album_id=" + Root.value("Album_Id").toString() + "&album_audio_id=" + Root.value("Album_Audio_Id").toString();
-            Download_Thread->run(Download_Url,1,Root.value("Music_Name").toString(),Root.value("Singer_Name").toString());
-        }
-        else if(Root.value("Platform").toString() == "Q")
-        {
-            
-        }
-
-    }
-}
-
-
-void SEARCH::on_Add_Like_clicked()
-{
-    Like_Json->open(QFile::ReadOnly);
-    QJsonDocument Temp_Like_Json = QJsonDocument::fromJson(QByteArray(Like_Json->readAll()));
-    Like_Json->close();
-    
-    Play_Json->open(QFile::ReadOnly);
-    QJsonDocument Temp_Play_Json = QJsonDocument::fromJson(QByteArray(Play_Json->readAll()));
-    Play_Json->close();
-
-    QJsonArray Play_Root = Temp_Play_Json.array();
-    QJsonArray Like_Root = Temp_Like_Json.array();
-
-    QJsonObject Add_Music = Play_Root.at(ui->Like_Play_List->currentRow()).toObject();
-
-    bool This_Music = true;
-    for(int i = 0; i < Like_Root.count(); i ++)
-    {
-        if(Like_Root.at(i).toObject() == Add_Music)
-        {
-            This_Music = false;
-            break;
-        }
-    }
-
-    if(This_Music == true)
-    {
-        Like_Json->open(QFile::WriteOnly);
-        QJsonArray Root = Temp_Like_Json.array();
-        Root.append(Add_Music);
-        Temp_Like_Json.setArray(Root);
-        Like_Json->write(QByteArray(Temp_Like_Json.toJson()));
-        Like_Json->close();
-    }
-}
-
-void SEARCH::Chat_Room_Show()
-{
-    ui->Music_List->setVisible(false);
-    ui->Play_Like->setVisible(false);
-    ui->EverDayMusic->setVisible(false);
-    ui->Chat_Room->setVisible(true);
-}
-
-void SEARCH::on_Clear_clicked()
-{
-    ui->Input->clear();
-    ui->Message->clear();
-}
-
-
-void SEARCH::Music_Data_Show()
-{
-    
-}
-
-
-void SEARCH::Server_Send()
-{
-    ui->Message->addItem(Server->Data.data());
-}
-
-
-void SEARCH::on_Send_clicked()
-{
-    if(ui->Input->text().size() < 1024)
-    {
-        Server->Client_Send(ui->Input->text());
-    }
-    else
-    {
-        QMessageBox::information(0,"提示","输入字符过多");
+        QFile::remove(".\\Data\\List_png");//删除图片
     }
 }

@@ -2,7 +2,7 @@
 
 void MThread::run(QString Download_Url,int Platform,QString Music_Name,QString Singer_Name)
 {
-    switch(Platform)
+    switch(Platform)//判断音乐平台
     {
         case 0:
         {
@@ -21,7 +21,6 @@ void MThread::run(QString Download_Url,int Platform,QString Music_Name,QString S
             if(Value_2.value("url").isNull() == false)//判断音乐神佛可下载
             {
                 Reply = Manager->get(QNetworkRequest(QUrl(Value_2.value("url").toString())));
-                connect(Manager, SIGNAL(finished(QNetworkReply*)), &EventLoop, SLOT(quit()));
                 EventLoop.exec();
 
                 //保存音乐
@@ -56,11 +55,10 @@ void MThread::run(QString Download_Url,int Platform,QString Music_Name,QString S
             {
                 //下载歌曲
                 Reply = Manager->get(QNetworkRequest(QUrl(Root.value("data").toObject().value("play_url").toString())));
-                connect(Manager, SIGNAL(finished(QNetworkReply*)), &EventLoop, SLOT(quit()));
                 EventLoop.exec();
 
                 //保存音乐
-                QFile Music(".\\Music\\2-" + Music_Name + "-" + Singer_Name + ".mp3");
+                QFile Music(".\\Music\\1-" + Music_Name + "-" + Singer_Name + ".mp3");
                 Music.open(QFile::WriteOnly);
                 Music.write(Reply->readAll());
                 Music.close();

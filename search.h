@@ -1,7 +1,7 @@
 #ifndef SEARCH_H
 #define SEARCH_H
 
-#define Music_Max_Number 10
+#define Music_Max_Number 10 //获取搜索歌曲最大值
 
 #include <QWidget>
 #include <QJsonArray>
@@ -27,71 +27,78 @@ class SEARCH;
 
 class SEARCH : public QWidget
 {
-    Q_OBJECT
+Q_OBJECT
 
 public:
-    explicit SEARCH(QWidget *parent = nullptr);
-    ~SEARCH();
-    void Set_Theme_Color(QString Color);
-    void Play_List_Show();
-    void Like_List_Show();
-    void Chat_Room_Show();
-    int Return_State();
+    explicit SEARCH(QWidget *parent = nullptr);//构造函数
+
+    ~SEARCH();//析构函数
+
+    void Set_Theme_Color(QString Color);//设置主题颜色函数
+
+    void Play_List_Show();//显示播放列表函数
+
+    void Like_List_Show();//显示喜欢列表函数
+
+    void Chat_Room_Show();//显示聊天室函数
 
 private slots:
-    void on_PushButton_clicked();
+    void on_Search_Button_clicked();//搜索按钮点击槽函数
 
-    void on_Music_List_itemClicked(QListWidgetItem *item);
+    void on_Search_Music_List_itemClicked(QListWidgetItem *item);//搜索音乐列表点击槽函数
 
-    void on_Back_clicked();
+    void on_Back_Button_clicked();//点击返回主页槽函数
 
-    void on_Play_All_clicked();
+    void on_Play_All_Button_clicked();//点击播放全部槽函数
 
-    void on_Delete_clicked();
+    void on_Delete_Button_clicked();//点击删除歌单内歌曲槽函数
 
-    void on_Download_clicked();
+    void on_Download_Button_clicked();//点击下载歌曲槽函数
 
-    void on_Add_Like_clicked();
+    void on_Add_Like_Button_clicked();//点击添加到喜欢列表槽函数
 
-    void on_Send_clicked();
+    void on_Send_Button_clicked();//点击发送信息给服务器槽函数
 
-    void on_Clear_clicked();
+    void on_Clear_Button_clicked();//点击清除信息列表和输入框槽函数
 
-    void Server_Send();
+    void Server_Send();//服务器发送信息槽函数
 
-    void Music_Data_Show();
+    void Lyrics_Show();//显示歌词槽函数
 
 signals:
 
-    void Play_All();
+    void Play_All();//播放全部歌曲信号
 
-    void Update_Music();
+    void Update_Music();//播放歌曲更新信号
 
 private:
-    //歌名 歌手名
-    QString Music_Name[Music_Max_Number];
-    QString Singer_Name[Music_Max_Number];
-    //网易云
-    QString Cloud_Music_Id[Music_Max_Number];
-    //酷狗
-    QString Kugou_Music_Hash[Music_Max_Number];
-    QString Kugou_Album_Id[Music_Max_Number];
-    QString Kugou_Album_Audio_Id[Music_Max_Number];
-    //QQ
-    QString QQ_Music_Id[Music_Max_Number];
+    QString Music_Name[Music_Max_Number];//歌名
 
-    QJsonDocument Json_File_Temp;
+    QString Singer_Name[Music_Max_Number];//歌手名
 
-    QFile *Data_Json = new QFile("./Data/Data.json");
-    QFile *Like_Json = new QFile("./Data/Like.json");
-    QFile *Play_Json = new QFile("./Data/Play.json");
+    QString Cloud_Music_Id[Music_Max_Number];//网易云音乐ID
 
-    MThread *Download_Thread;
-    SERVER *Server;
+    QString Kugou_Music_Hash[Music_Max_Number];//酷狗音乐Hash
+
+    QString Kugou_Album_Id[Music_Max_Number];//酷狗音乐Album_Id
+
+    QString Kugou_Album_Audio_Id[Music_Max_Number];//酷狗音乐Album_Audio_Id
+
+    QString QQ_Music_Id[Music_Max_Number];//QQ音乐ID
+
+    QFile *Data_Json = new QFile("./Data/Data.json");//客户端设置文件
+
+    QFile *Like_Json = new QFile("./Data/Like.json");//喜欢列表文件
+
+    QFile *Play_Json = new QFile("./Data/Play.json");//播放列表文件
+
+    MThread *Download_Thread;//下载音乐线程
+
+    SERVER *Server;//连接服务器
+    
     Ui::SEARCH *ui;
-    QString User_Name = " ";
 
-    void Get_Ever_Day_Music();
+    void Get_Recommended_Playlist();//获取推荐歌单
 };
 
 #endif // SEARCH_H
