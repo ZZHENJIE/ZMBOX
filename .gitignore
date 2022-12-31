@@ -39,3 +39,9 @@ build
 
 # Qt
 *.user
+
+#Vscode
+.Vscode
+
+#Cache
+.cache
