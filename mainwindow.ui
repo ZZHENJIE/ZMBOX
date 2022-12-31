@@ -75,16 +75,16 @@
       <x>0</x>
       <y>0</y>
       <width>100</width>
-      <height>100</height>
+      <height>600</height>
      </rect>
     </property>
     <widget class="QPushButton" name="Room">
      <property name="geometry">
       <rect>
-       <x>0</x>
-       <y>0</y>
-       <width>50</width>
-       <height>50</height>
+       <x>10</x>
+       <y>100</y>
+       <width>80</width>
+       <height>80</height>
       </rect>
      </property>
      <property name="styleSheet">
@@ -99,8 +99,8 @@
      </property>
      <property name="iconSize">
       <size>
-       <width>45</width>
-       <height>45</height>
+       <width>75</width>
+       <height>75</height>
       </size>
      </property>
      <property name="flat">
@@ -110,10 +110,10 @@
     <widget class="QPushButton" name="Set">
      <property name="geometry">
       <rect>
-       <x>50</x>
-       <y>0</y>
-       <width>50</width>
-       <height>50</height>
+       <x>10</x>
+       <y>10</y>
+       <width>80</width>
+       <height>80</height>
       </rect>
      </property>
      <property name="styleSheet">
@@ -128,8 +128,8 @@
      </property>
      <property name="iconSize">
       <size>
-       <width>45</width>
-       <height>45</height>
+       <width>75</width>
+       <height>75</height>
       </size>
      </property>
      <property name="flat">
@@ -139,10 +139,10 @@
     <widget class="QPushButton" name="Like">
      <property name="geometry">
       <rect>
-       <x>0</x>
-       <y>50</y>
-       <width>50</width>
-       <height>50</height>
+       <x>10</x>
+       <y>280</y>
+       <width>80</width>
+       <height>80</height>
       </rect>
      </property>
      <property name="styleSheet">
@@ -157,8 +157,8 @@
      </property>
      <property name="iconSize">
       <size>
-       <width>45</width>
-       <height>45</height>
+       <width>75</width>
+       <height>75</height>
       </size>
      </property>
      <property name="flat">
@@ -168,10 +168,10 @@
     <widget class="QPushButton" name="Play">
      <property name="geometry">
       <rect>
-       <x>50</x>
-       <y>50</y>
-       <width>50</width>
-       <height>50</height>
+       <x>10</x>
+       <y>190</y>
+       <width>80</width>
+       <height>80</height>
       </rect>
      </property>
      <property name="styleSheet">
@@ -186,8 +186,8 @@
      </property>
      <property name="iconSize">
       <size>
-       <width>45</width>
-       <height>45</height>
+       <width>75</width>
+       <height>75</height>
       </size>
      </property>
      <property name="flat">
@@ -227,6 +227,27 @@
      <enum>Qt::Vertical</enum>
     </property>
    </widget>
+   <widget class="Line" name="line_3">
+    <property name="geometry">
+     <rect>
+      <x>100</x>
+      <y>90</y>
+      <width>1180</width>
+      <height>1</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(85, 85, 127);</string>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Horizontal</enum>
+    </property>
+   </widget>
+   <zorder>Background</zorder>
+   <zorder>line_1</zorder>
+   <zorder>line_2</zorder>
+   <zorder>Pushbutton</zorder>
+   <zorder>line_3</zorder>
   </widget>
  </widget>
  <resources>

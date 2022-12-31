@@ -10,7 +10,11 @@
 #include <QMediaPlayer>
 #include <QTimer>
 #include <QtCore/QObject>
-#include "mthread.h"
+#include <QMessageBox>
+#include <QFileInfo>
+#include "cloud_music.h"
+#include "kugou_music.h"
+#include "struct.h"
 
 namespace Ui {
 class PLAY;
@@ -46,27 +50,33 @@ private slots:
 
     void on_Audio_Size_sliderReleased();//音量大小调整槽函数
 
-    void Play_Number_Update();//播放歌曲序号更新槽函数
+    void Play_Number_Update(bool Delete);//播放歌曲序号更新槽函数
 
     void Play_Number_Init();//播放歌曲序号初始化槽函数
 
+    void Change_Music_Play(int Number);//播放歌曲改变
+
 signals:
-    void Clicked_Music_Icon();//点击歌曲图片信号
+    void Clicked_Music_Icon(Music_Info Info);//点击歌曲图片信号
 
 private:
-    QAudioOutput Audio_OP;//音乐输出设备
+    QAudioOutput *Audio_OP = new QAudioOutput();//音乐输出设备
 
-    QMediaPlayer Music_Media;//储存音乐信息
+    QMediaPlayer *Music_Media = new QMediaPlayer();//储存音乐信息
 
     Ui::PLAY *ui;
-
-    MThread *Download;//下载线程
 
     QFile *Play_Json = new QFile("./Data/Play.json");//播放列表文件
     
     QJsonArray Play_List;//储存播放列表内歌曲信息
 
-    QTimer Time;//计时器
+    QTimer *Time = new QTimer();//计时器
+
+    Cloud_Music *Cloud;//网易云音乐类
+
+    KuGou_Music *KuGou;//酷狗音乐类
+
+    MThread *Image;//下载图片线程
 
     qint64 Muisc_Max_Leng = 0;//音乐时长
 
@@ -75,6 +85,8 @@ private:
     int Play_Number = 0;//播放音乐序号
 
     void Change_Music();//音乐改变函数
+
+    void Preload_Image();//预加载图片函数
 };
 
 #endif // PLAY_INTERFACE_H

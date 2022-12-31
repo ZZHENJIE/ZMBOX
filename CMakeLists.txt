@@ -22,6 +22,9 @@ set(PROJECT_SOURCES
         search.cpp
         mthread.cpp
         server.cpp
+        cloud_music.cpp
+        kugou_music.cpp
+        primary.cpp
 
         mainwindow.h
         set.h
@@ -29,11 +32,16 @@ set(PROJECT_SOURCES
         search.h
         mthread.h
         server.h
+        cloud_music.h
+        kugou_music.h
+        struct.h
+        primary.h
 
         mainwindow.ui
         set.ui
         play.ui
         search.ui
+        primary.ui
 
         Resources.qrc
         Icon.rc

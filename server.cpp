@@ -2,8 +2,6 @@
 
 SERVER::SERVER()//构造函数
 {
-    Server = new QTcpSocket();
-
     Server->connectToHost(SERVER_IP,SERVER_PORT);//连接服务器
 
     if(Server->waitForConnected() == false)//查看是否连接成功

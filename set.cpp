@@ -9,36 +9,7 @@ SET::SET(QWidget *parent) :
     this->setFixedSize(geometry().size());//设置窗口无法调整大小
     this->setWindowTitle("设置");//设置窗口标题
     this->setWindowIcon(QIcon(":/Resource/Set.png"));//设置窗口图标
-    
-    if(!QDir("./Data").exists())//如果没有文件夹返回真
-    {
-        QDir Temp_Dir;
-        Temp_Dir.mkdir("./Data");//创建文件夹
 
-        QFile Temp_File("./Data/Like.json");//创建喜欢列表文件
-        Temp_File.open(QFile::WriteOnly);
-        Temp_File.close();
-        Temp_File.setFileName("./Data/Play_List.json");//创建播放列表文件
-        Temp_File.open(QFile::WriteOnly);
-        Temp_File.close();
-        
-        Json->open(QFile::WriteOnly);
-
-        QJsonObject Root;//写入Data文件的值
-        Root.insert("QQ_Logged",false);
-        Root.insert("QQ_Number"," ");
-        Root.insert("QQ_Image_Url"," ");
-        Root.insert("QQ_Name"," ");
-        Root.insert("Background_Dir",":/Resource/Background.png");
-        Root.insert("Save_While_Listening",false);
-        Root.insert("Theme_Color","96,111,228,150");
-
-        QJsonDocument Temp_Json;
-        Temp_Json.setObject(Root);
-        Json->write(QByteArray(Temp_Json.toJson()));
-
-        Json->close();
-    }
     Json->open(QFile::ReadOnly);//打开设置Json
     QJsonDocument Temp_Json = QJsonDocument::fromJson(QByteArray(Json->readAll()));
     Json->close();
@@ -58,9 +29,20 @@ SET::SET(QWidget *parent) :
         ui->Open_Dir->setVisible(false);
     }
 
+    if(Root.value("Tray").toBool())//检查托盘功能
+    {
+        ui->Tray_Open->setChecked(true);
+        ui->Tray_Close->setChecked(false);
+    }
+    else
+    {
+        ui->Tray_Open->setChecked(false);
+        ui->Tray_Close->setChecked(true);
+    }
+
     if(Root.value("QQ_Logged").toBool())//检查QQ登入功能
     {
-        ui->Image->setPixmap(QPixmap("./Data/Image.png"));
+        ui->Image->setPixmap(QPixmap("./Image/QQ.png"));
         ui->Name->setText(Root.value("QQ_Name").toString());
         ui->Log->setVisible(true);
         ui->Not_Log->setVisible(false);
@@ -159,7 +141,7 @@ void SET::on_Log_Pushbutton_clicked()//登入QQ按钮槽函数
             EventLoop.exec();
 
             //保存Image
-            QFile Image(".\\Data\\Image.png");
+            QFile Image(".\\Image\\QQ.png");
             Image.open(QFile::WriteOnly);
             Image.write(Reply->readAll());
             Image.close();
@@ -266,3 +248,100 @@ void SET::on_Application_clicked()//应用主题颜色按钮槽函数
     Reboot_Signals();
     this->close();
 }
+
+void SET::on_Fix_clicked()//修复槽函数
+{
+    QDir Temp_Dir;
+    Temp_Dir.mkdir("./Data");//创建文件夹
+    Temp_Dir.mkdir("./Music");//创建文件夹
+    Temp_Dir.mkdir("./Music/KuGou");//创建文件夹
+    Temp_Dir.mkdir("./Music/Cloud");//创建文件夹
+    Temp_Dir.mkdir("./Image");//创建文件夹
+    Temp_Dir.mkdir("./Image/KuGou");//创建文件夹
+    Temp_Dir.mkdir("./Image/Cloud");//创建文件夹
+    Temp_Dir.mkdir("./Image/List");//创建文件夹
+
+    QFile Temp_File("./Data/Like.json");//创建喜欢列表文件
+    Temp_File.open(QFile::WriteOnly);
+    Temp_File.close();
+    Temp_File.setFileName("./Data/Play.json");//创建播放列表文件
+    Temp_File.open(QFile::WriteOnly);
+    Temp_File.close();
+    Temp_File.setFileName("./Data/List.json");//创建推荐歌单列表文件
+    Temp_File.open(QFile::WriteOnly);
+    Temp_File.close();
+
+    Json->open(QFile::WriteOnly);
+
+    QJsonObject Root;//写入Data文件的值
+    Root.insert("QQ_Logged",false);
+    Root.insert("QQ_Number"," ");
+    Root.insert("QQ_Image_Url"," ");
+    Root.insert("QQ_Name"," ");
+    Root.insert("Background_Dir",":/Resource/Background.png");
+    Root.insert("Save_While_Listening",false);
+    Root.insert("Theme_Color","96,111,228,150");
+    Root.insert("Tray",false);
+
+    QJsonDocument Temp_Json;
+    Temp_Json.setObject(Root);
+    Json->write(QByteArray(Temp_Json.toJson()));
+
+    Json->close();
+
+    QMessageBox::information(0,"提示","修复完毕,播放列表与收藏列表内的数据都被清空,需要重新启动软件");
+    Reboot_Signals();
+    this->close();
+}
+
+
+void SET::on_Tray_Open_clicked()//开启托盘功能
+{
+    Json->open(QFile::ReadOnly);
+    QJsonDocument Temp_Json = QJsonDocument::fromJson(QByteArray(Json->readAll()));
+    Json->close();
+    Json->open(QFile::WriteOnly);
+    QJsonObject Root = Temp_Json.object();
+
+    QJsonValueRef Value = Root.find("Tray").value();
+    Value = QJsonValue(true);
+
+    Temp_Json.setObject(Root);
+    Json->write(QByteArray(Temp_Json.toJson()));
+
+    Json->close();
+
+    if(!QDir("./Music").exists())
+    {
+        QDir Temp_Dir;
+        Temp_Dir.mkdir("./Music");
+    }
+
+    QMessageBox::information(0,"提示","开启成功,需要重新启动软件");
+    Reboot_Signals();
+    this->close();
+}
+
+
+void SET::on_Tray_Close_clicked()//关闭托盘功能
+{
+    Json->open(QFile::ReadOnly);
+    QJsonDocument Temp_Json = QJsonDocument::fromJson(QByteArray(Json->readAll()));
+    Json->close();
+    Json->open(QFile::WriteOnly);
+    QJsonObject Root = Temp_Json.object();
+
+    QJsonValueRef Value = Root.find("Tray").value();
+    Value = QJsonValue(false);
+
+    Temp_Json.setObject(Root);
+    Json->write(QByteArray(Temp_Json.toJson()));
+
+    Json->close();
+
+    ui->Open_Dir->setVisible(false);
+    QMessageBox::information(0,"提示","关闭成功,需要重新启动软件");
+    Reboot_Signals();
+    this->close();
+}
+

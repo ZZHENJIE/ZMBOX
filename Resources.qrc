@@ -21,5 +21,6 @@
         <file>Resource/Set.png</file>
         <file>Resource/Vertical_Scroll_bar.png</file>
         <file>Resource/Back.png</file>
+        <file>Resource/QListWidget.qss</file>
     </qresource>
 </RCC>

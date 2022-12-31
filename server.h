@@ -1,8 +1,8 @@
 #ifndef SERVER_H
 #define SERVER_H
 
-#define SERVER_IP      "1.1.1.1"      //服务器IP地址
-#define SERVER_PORT    0000           //服务器端口号
+#define SERVER_IP      "47.113.221.13"      //服务器IP地址
+#define SERVER_PORT    2005           //服务器端口号
 
 #include <QObject>
 #include <QMessageBox>
@@ -26,7 +26,7 @@ public:
 
     void Client_Send(QString Message_Data);//客户端发送信息
 private:
-    QTcpSocket *Server;
+    QTcpSocket *Server = new QTcpSocket();//服务器套接字
 private slots:
     void Server_Send();//服务器发送信息槽函数
 signals:

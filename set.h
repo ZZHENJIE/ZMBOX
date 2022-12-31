@@ -45,6 +45,12 @@ private slots:
 
     void on_Application_clicked();//应用主题颜色按钮槽函数
 
+    void on_Fix_clicked();//修复槽函数
+
+    void on_Tray_Open_clicked();//开启托盘功能槽函数
+
+    void on_Tray_Close_clicked();//关闭托盘功能槽函数
+
 signals:
     void Reboot_Signals();//重启软件信号
 
