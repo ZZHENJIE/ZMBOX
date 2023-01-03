@@ -53,4 +53,4 @@
 
 * [B站](https://space.bilibili.com/1362205077?spm_id_from=333.1007.0.0)
 
-* [学习屋](https://zzhenjie.github.io/Learning_House/#/)
+* [学习屋](https://www.zhenjie.tk/#/)

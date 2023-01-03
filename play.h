@@ -57,7 +57,9 @@ private slots:
     void Change_Music_Play(int Number);//播放歌曲改变
 
 signals:
-    void Clicked_Music_Icon(Music_Info Info);//点击歌曲图片信号
+    void Clicked_Music_Icon();//点击歌曲图片信号
+
+    void Lyrics_Change(Music_Info Info);//歌词界面改变
 
 private:
     QAudioOutput *Audio_OP = new QAudioOutput();//音乐输出设备
@@ -87,6 +89,8 @@ private:
     void Change_Music();//音乐改变函数
 
     void Preload_Image();//预加载图片函数
+
+    void Music_Info_Pack();//歌曲信息打包
 };
 
 #endif // PLAY_INTERFACE_H

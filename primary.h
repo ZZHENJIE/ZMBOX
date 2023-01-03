@@ -55,13 +55,35 @@ private slots:
 
     void Server_Send();//服务器发送信息槽函数
 
-    void Lyrics_Show(Music_Info Info);//显示歌词槽函数
+    void Lyrics_Show();//显示歌词槽函数
 
     void on_Like_Play_List_itemDoubleClicked(QListWidgetItem *item);//双击播放和喜欢列表槽函数
 
     void Search_Button_clicked(int Platform,QString Text);//搜索按钮点击槽函数
 
     void Back_Button_clicked();//点击返回主页槽函数
+
+    void Lyrics_Change(Music_Info Info);//歌词更新槽函数
+
+    void on_List_0_clicked();//歌单按钮槽函数
+
+    void on_List_1_clicked();
+
+    void on_List_2_clicked();
+
+    void on_List_3_clicked();
+
+    void on_List_4_clicked();
+
+    void on_List_5_clicked();
+
+    void on_List_6_clicked();
+
+    void on_List_7_clicked();
+
+    void on_List_8_clicked();
+
+    void on_List_9_clicked();
 
 signals:
 

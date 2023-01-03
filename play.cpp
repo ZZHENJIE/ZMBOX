@@ -74,7 +74,6 @@ void PLAY::ON_Time_Out()//播放歌曲计时器调用槽函数
     if(Music_Media->position()/1000 == Muisc_Max_Leng)//判断是否播放完毕
     {
         on_Next_clicked();
-        on_Image_clicked();
     }
 }
 
@@ -91,7 +90,6 @@ void PLAY::on_Back_clicked()//上一曲按钮槽函数
     ui->Play->setIcon(QIcon(":/Resource/Paused.png"));//设置暂停图标
     Change_Music();//音乐改变
 }
-
 
 void PLAY::on_Play_clicked()//播放或暂停按钮槽函数
 {
@@ -112,7 +110,6 @@ void PLAY::on_Play_clicked()//播放或暂停按钮槽函数
     }
 }
 
-
 void PLAY::on_Next_clicked()//下一首按钮槽函数
 {
     if(Play_Number == Play_List.count() - 1)//判断是否为最后一首歌曲
@@ -127,7 +124,6 @@ void PLAY::on_Next_clicked()//下一首按钮槽函数
     Change_Music();//音乐改变
 }
 
-
 void PLAY::on_Audio_clicked()//音量大小按钮槽函数
 {
     if(ui->Audio_Size->isVisible())//判断调整音量大小按钮可用性
@@ -140,33 +136,9 @@ void PLAY::on_Audio_clicked()//音量大小按钮槽函数
     }
 }
 
-
 void PLAY::on_Image_clicked()//歌曲图片按钮槽函数
 {
-    Music_Info Info;
-    if(Play_List.at(Play_Number).toObject().value("Platform").toString() == "W")//判断音乐平台
-    {
-        Info.Platform = "W";
-        Info.Music_Id = Play_List.at(Play_Number).toObject().value("Music_Id").toString();
-        Cloud->Set_Id(Info.Music_Id);
-        Info.Music_Lyrics = Cloud->Get_Lyrics();
-        Info.Music_Name = Play_List.at(Play_Number).toObject().value("Music_Name").toString();
-        Info.Singer_Name = Play_List.at(Play_Number).toObject().value("Singer_Name").toString();
-    }
-    else if(Play_List.at(Play_Number).toObject().value("Platform").toString() == "K")
-    {
-        Info.Platform = "K";
-        Info.Music_Id = Play_List.at(Play_Number).toObject().value("Album_Id").toString();
-        KuGou->Set_Id(Play_List.at(Play_Number).toObject().value("Music_Hash").toString(),Info.Music_Id,Play_List.at(Play_Number).toObject().value("Album_Audio_Id").toString());
-        Info.Music_Lyrics = KuGou->Get_Lyrics();
-        Info.Music_Name = Play_List.at(Play_Number).toObject().value("Music_Name").toString();
-        Info.Singer_Name = Play_List.at(Play_Number).toObject().value("Singer_Name").toString();
-    }
-    else if(Play_List.at(Play_Number).toObject().value("Platform").toString() == "Q")
-    {
-        Info.Platform = "Q";
-    }
-    Clicked_Music_Icon(Info);
+    Clicked_Music_Icon();
 }
 
 void PLAY::on_Music_Pos_sliderReleased()//音乐播放时间进度调整槽函数
@@ -272,6 +244,7 @@ void PLAY::Change_Music()//音乐改变函数
     Time->start();
     ui->Name->setText(Play_List.at(Play_Number).toObject().value("Music_Name").toString()+ "    " +Play_List.at(Play_Number).toObject().value("Singer_Name").toString());
     Preload_Image();
+    Music_Info_Pack();
 }
 
 void PLAY::Preload_Image()//预加载图片函数
@@ -337,4 +310,32 @@ void PLAY::Preload_Image()//预加载图片函数
     {
 
     }
+}
+
+void PLAY::Music_Info_Pack()//歌曲信息打包
+{
+    Music_Info Info;
+    if(Play_List.at(Play_Number).toObject().value("Platform").toString() == "W")//判断音乐平台
+    {
+        Info.Platform = "W";
+        Info.Music_Id = Play_List.at(Play_Number).toObject().value("Music_Id").toString();
+        Cloud->Set_Id(Info.Music_Id);
+        Info.Music_Lyrics = Cloud->Get_Lyrics();
+        Info.Music_Name = Play_List.at(Play_Number).toObject().value("Music_Name").toString();
+        Info.Singer_Name = Play_List.at(Play_Number).toObject().value("Singer_Name").toString();
+    }
+    else if(Play_List.at(Play_Number).toObject().value("Platform").toString() == "K")
+    {
+        Info.Platform = "K";
+        Info.Music_Id = Play_List.at(Play_Number).toObject().value("Album_Id").toString();
+        KuGou->Set_Id(Play_List.at(Play_Number).toObject().value("Music_Hash").toString(),Info.Music_Id,Play_List.at(Play_Number).toObject().value("Album_Audio_Id").toString());
+        Info.Music_Lyrics = KuGou->Get_Lyrics();
+        Info.Music_Name = Play_List.at(Play_Number).toObject().value("Music_Name").toString();
+        Info.Singer_Name = Play_List.at(Play_Number).toObject().value("Singer_Name").toString();
+    }
+    else if(Play_List.at(Play_Number).toObject().value("Platform").toString() == "Q")
+    {
+        Info.Platform = "Q";
+    }
+    Lyrics_Change(Info);
 }

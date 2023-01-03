@@ -40,9 +40,20 @@ SET::SET(QWidget *parent) :
         ui->Tray_Close->setChecked(true);
     }
 
+    if(Root.value("ChatRoom").toBool())//检查聊天室功能
+    {
+        ui->Room_Open->setChecked(true);
+        ui->Room_Close->setChecked(false);
+    }
+    else
+    {
+        ui->Room_Open->setChecked(false);
+        ui->Room_Close->setChecked(true);
+    }
+
     if(Root.value("QQ_Logged").toBool())//检查QQ登入功能
     {
-        ui->Image->setPixmap(QPixmap("./Image/QQ.png"));
+        ui->Image->setIcon(QIcon("./Image/QQ.png"));
         ui->Name->setText(Root.value("QQ_Name").toString());
         ui->Log->setVisible(true);
         ui->Not_Log->setVisible(false);
@@ -282,6 +293,7 @@ void SET::on_Fix_clicked()//修复槽函数
     Root.insert("Save_While_Listening",false);
     Root.insert("Theme_Color","96,111,228,150");
     Root.insert("Tray",false);
+    Root.insert("ChatRoom",false);
 
     QJsonDocument Temp_Json;
     Temp_Json.setObject(Root);
@@ -332,6 +344,57 @@ void SET::on_Tray_Close_clicked()//关闭托盘功能
     QJsonObject Root = Temp_Json.object();
 
     QJsonValueRef Value = Root.find("Tray").value();
+    Value = QJsonValue(false);
+
+    Temp_Json.setObject(Root);
+    Json->write(QByteArray(Temp_Json.toJson()));
+
+    Json->close();
+
+    ui->Open_Dir->setVisible(false);
+    QMessageBox::information(0,"提示","关闭成功,需要重新启动软件");
+    Reboot_Signals();
+    this->close();
+}
+
+
+void SET::on_Room_Open_clicked()
+{
+    Json->open(QFile::ReadOnly);
+    QJsonDocument Temp_Json = QJsonDocument::fromJson(QByteArray(Json->readAll()));
+    Json->close();
+    Json->open(QFile::WriteOnly);
+    QJsonObject Root = Temp_Json.object();
+
+    QJsonValueRef Value = Root.find("ChatRoom").value();
+    Value = QJsonValue(true);
+
+    Temp_Json.setObject(Root);
+    Json->write(QByteArray(Temp_Json.toJson()));
+
+    Json->close();
+
+    if(!QDir("./Music").exists())
+    {
+        QDir Temp_Dir;
+        Temp_Dir.mkdir("./Music");
+    }
+
+    QMessageBox::information(0,"提示","开启成功,需要重新启动软件");
+    Reboot_Signals();
+    this->close();
+}
+
+
+void SET::on_Room_Close_clicked()
+{
+    Json->open(QFile::ReadOnly);
+    QJsonDocument Temp_Json = QJsonDocument::fromJson(QByteArray(Json->readAll()));
+    Json->close();
+    Json->open(QFile::WriteOnly);
+    QJsonObject Root = Temp_Json.object();
+
+    QJsonValueRef Value = Root.find("ChatRoom").value();
     Value = QJsonValue(false);
 
     Temp_Json.setObject(Root);

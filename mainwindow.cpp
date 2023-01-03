@@ -22,6 +22,13 @@ MainWindow::MainWindow(QWidget *parent)
         User_Log_State = true;
     }
 
+    if(Temp_Json.object().value("ChatRoom").toBool() == false)//判断聊天室功能是否开启
+    {
+        ui->Room->setVisible(false);
+        ui->Play->move(10,100);
+        ui->Like->move(10,190);
+    }
+
     Search = new SEARCH(this);//创建搜索类
     Play = new PLAY(this);//创建播放类
     Primary = new PRIMARY(this);//创建主要显示类
@@ -42,10 +49,12 @@ MainWindow::MainWindow(QWidget *parent)
     connect(Search,SIGNAL(Search_Button_clicked(int,QString)),Primary,SLOT(Search_Button_clicked(int,QString)));
     connect(Search,SIGNAL(Back_Button_clicked()),Primary,SLOT(Back_Button_clicked()));
     
-    connect(Play,SIGNAL(Clicked_Music_Icon(Music_Info)),Primary,SLOT(Lyrics_Show(Music_Info)));//点击歌曲图片信号,显示歌词槽函数
+    connect(Play,SIGNAL(Clicked_Music_Icon()),Primary,SLOT(Lyrics_Show()));//点击歌曲图片信号,显示歌词槽函数
+    connect(Play,SIGNAL(Lyrics_Change(Music_Info)),Primary,SLOT(Lyrics_Change(Music_Info)));//改变歌曲信号,更新歌词槽函数
     connect(Primary,SIGNAL(Play_All()),Play,SLOT(Play_Number_Init()));//点击播放全部按钮信号,播放歌曲序号初始化槽函数
     connect(Primary,SIGNAL(Update_Music(bool)),Play,SLOT(Play_Number_Update(bool)));//点击删除或添加歌曲信号,播放歌曲序号更新槽函数
     connect(Primary,SIGNAL(Change_Music_Number(int)),Play,SLOT(Change_Music_Play(int)));//改变歌曲
+
     connect(Next,SIGNAL(triggered()),Play,SLOT(on_Next_clicked()));//上一首信息
     connect(Back,SIGNAL(triggered()),Play,SLOT(on_Back_clicked()));//下一首信号
     connect(Play_Paused,SIGNAL(triggered()),Play,SLOT(on_Play_clicked()));//播放或暂停信号

@@ -18,7 +18,7 @@ PRIMARY::PRIMARY(QWidget *parent) :
     Cloud = new Cloud_Music();
     KuGou = new KuGou_Music();
 
-    Cloud->Get_Recommended_Playlist("清新");//获取歌单
+    Cloud->Get_Recommended_Playlist("夜晚");//获取歌单
 
     Set_Recommended_Playlist();//设置歌单
 
@@ -28,6 +28,11 @@ PRIMARY::PRIMARY(QWidget *parent) :
     Server->User_Name = Temp_Json.object().value("QQ_Name").toString();
 
     connect(Server,SIGNAL(Server_Send_Signals()),this,SLOT(Server_Send()));//连接服务器发送信号
+
+    if(Temp_Json.object().value("ChatRoom").toBool() == true)
+    {
+        Server->Server_Connection();
+    }
 }
 
 PRIMARY::~PRIMARY()//析构函数
@@ -462,14 +467,70 @@ void PRIMARY::Server_Send()//服务器发送信息槽函数
     ui->Message_List->addItem(Server->Data.data());//服务器发送信息给客户端
 }
 
-void PRIMARY::Lyrics_Show(Music_Info Info)//显示歌词槽函数
+void PRIMARY::Lyrics_Show()//显示歌词槽函数
 {
-    ui->Lyrics_List->clear();
     ui->Lyrics->setVisible(true);//设置歌词列表窗体可用性
     ui->Play_Like->setVisible(false);//设置喜欢列表播放列表窗体可用性
     ui->Search_Music_List->setVisible(false);//设置搜索列表窗体可用性
     ui->Recommended_Playlist->setVisible(false);//设置推荐歌单窗体可用性
     ui->Chat_Room->setVisible(false);//设置聊天室窗体可用性
+}
+
+void PRIMARY::Search_Button_clicked(int Platform,QString Text)//搜索按钮点击槽函数
+{
+    Search_Platform = Platform;
+    ui->Search_Music_List->clear();//清空列表信息
+    ui->Lyrics->setVisible(false);//设置歌词列表窗体可用性
+    ui->Play_Like->setVisible(false);//设置喜欢列表播放列表窗体可用性
+    ui->Search_Music_List->setVisible(true);//设置搜索列表窗体可用性
+    ui->Recommended_Playlist->setVisible(false);//设置推荐歌单窗体可用性
+    ui->Chat_Room->setVisible(false);//设置聊天室窗体可用性
+
+    switch(Search_Platform)
+    {
+        case 0://网易云
+        {
+            Cloud->Get_Search_Data(Cloud_Search,Text,"10");
+            for(int i = 0; i < Music_Max_Number;i++)
+            {
+                QListWidgetItem *Item = new QListWidgetItem;
+                Item->setSizeHint(QSize(1160,50));//设置每行宽高
+                Item->setText(Cloud_Search[i].Music_Name+"      "+Cloud_Search[i].Singer_Name);//设置文本
+                ui->Search_Music_List->addItem(Item);//添加至列表
+            }
+            break;
+        }
+        case 1://酷狗
+        {
+            KuGou->Get_Search_Data(KuGou_Search,Text,"10");
+            for(int i = 0; i < Music_Max_Number;i++)
+            {
+                QListWidgetItem *Item = new QListWidgetItem;
+                Item->setSizeHint(QSize(1160,50));//设置每行宽高
+                Item->setText(KuGou_Search[i].Music_Name+"      "+KuGou_Search[i].Singer_Name);//设置文本
+                ui->Search_Music_List->addItem(Item);//添加至列表
+            }
+            break;
+        }
+        case 2://QQ
+        {
+            break;
+        }
+    }
+}
+
+void PRIMARY::Back_Button_clicked()//点击返回主页槽函数
+{
+    ui->Lyrics->setVisible(false);//设置歌词列表窗体可用性
+    ui->Play_Like->setVisible(false);//设置喜欢列表播放列表窗体可用性
+    ui->Search_Music_List->setVisible(false);//设置搜索列表窗体可用性
+    ui->Recommended_Playlist->setVisible(true);//设置推荐歌单窗体可用性
+    ui->Chat_Room->setVisible(false);//设置聊天室窗体可用性
+}
+
+void PRIMARY::Lyrics_Change(Music_Info Info)//歌词更新槽函数
+{
+    ui->Lyrics_List->clear();
 
     int Count = 0;//循环计数
 
@@ -537,58 +598,6 @@ void PRIMARY::Lyrics_Show(Music_Info Info)//显示歌词槽函数
     }
 }
 
-void PRIMARY::Search_Button_clicked(int Platform,QString Text)//搜索按钮点击槽函数
-{
-    Search_Platform = Platform;
-    ui->Search_Music_List->clear();//清空列表信息
-    ui->Lyrics->setVisible(false);//设置歌词列表窗体可用性
-    ui->Play_Like->setVisible(false);//设置喜欢列表播放列表窗体可用性
-    ui->Search_Music_List->setVisible(true);//设置搜索列表窗体可用性
-    ui->Recommended_Playlist->setVisible(false);//设置推荐歌单窗体可用性
-    ui->Chat_Room->setVisible(false);//设置聊天室窗体可用性
-
-    switch(Search_Platform)
-    {
-        case 0://网易云
-        {
-            Cloud->Get_Search_Data(Cloud_Search,Text,"10");
-            for(int i = 0; i < Music_Max_Number;i++)
-            {
-                QListWidgetItem *Item = new QListWidgetItem;
-                Item->setSizeHint(QSize(1160,50));//设置每行宽高
-                Item->setText(Cloud_Search[i].Music_Name+"      "+Cloud_Search[i].Singer_Name);//设置文本
-                ui->Search_Music_List->addItem(Item);//添加至列表
-            }
-            break;
-        }
-        case 1://酷狗
-        {
-            KuGou->Get_Search_Data(KuGou_Search,Text,"10");
-            for(int i = 0; i < Music_Max_Number;i++)
-            {
-                QListWidgetItem *Item = new QListWidgetItem;
-                Item->setSizeHint(QSize(1160,50));//设置每行宽高
-                Item->setText(KuGou_Search[i].Music_Name+"      "+KuGou_Search[i].Singer_Name);//设置文本
-                ui->Search_Music_List->addItem(Item);//添加至列表
-            }
-            break;
-        }
-        case 2://QQ
-        {
-            break;
-        }
-    }
-}
-
-void PRIMARY::Back_Button_clicked()//点击返回主页槽函数
-{
-    ui->Lyrics->setVisible(false);//设置歌词列表窗体可用性
-    ui->Play_Like->setVisible(false);//设置喜欢列表播放列表窗体可用性
-    ui->Search_Music_List->setVisible(false);//设置搜索列表窗体可用性
-    ui->Recommended_Playlist->setVisible(true);//设置推荐歌单窗体可用性
-    ui->Chat_Room->setVisible(false);//设置聊天室窗体可用性
-}
-
 void PRIMARY::Set_Recommended_Playlist()//设置歌单
 {
     List_Json->open(QFile::ReadOnly);
@@ -639,3 +648,164 @@ void PRIMARY::Set_Recommended_Playlist()//设置歌单
 
     ui->List_9->setToolTip(Root.at(9).toObject().value("Name").toString());
 }
+
+
+void PRIMARY::on_List_0_clicked()
+{
+    List_Json->open(QFile::ReadOnly);
+
+    QJsonDocument Temp_Json = QJsonDocument::fromJson(QByteArray(List_Json->readAll()));
+
+    List_Json->close();
+
+    QJsonArray Root = Temp_Json.array();
+
+    Cloud->Get_Playlist_Details(Root.at(0).toObject().value("Id").toString());
+
+    Update_Music(true);
+}
+
+
+void PRIMARY::on_List_1_clicked()
+{
+    List_Json->open(QFile::ReadOnly);
+
+    QJsonDocument Temp_Json = QJsonDocument::fromJson(QByteArray(List_Json->readAll()));
+
+    List_Json->close();
+
+    QJsonArray Root = Temp_Json.array();
+
+    Cloud->Get_Playlist_Details(Root.at(1).toObject().value("Id").toString());
+
+    Update_Music(true);
+}
+
+
+void PRIMARY::on_List_2_clicked()
+{
+    List_Json->open(QFile::ReadOnly);
+
+    QJsonDocument Temp_Json = QJsonDocument::fromJson(QByteArray(List_Json->readAll()));
+
+    List_Json->close();
+
+    QJsonArray Root = Temp_Json.array();
+
+    Cloud->Get_Playlist_Details(Root.at(2).toObject().value("Id").toString());
+
+    Update_Music(true);
+}
+
+
+void PRIMARY::on_List_3_clicked()
+{
+    List_Json->open(QFile::ReadOnly);
+
+    QJsonDocument Temp_Json = QJsonDocument::fromJson(QByteArray(List_Json->readAll()));
+
+    List_Json->close();
+
+    QJsonArray Root = Temp_Json.array();
+
+    Cloud->Get_Playlist_Details(Root.at(3).toObject().value("Id").toString());
+
+    Update_Music(true);
+}
+
+
+void PRIMARY::on_List_4_clicked()
+{
+    List_Json->open(QFile::ReadOnly);
+
+    QJsonDocument Temp_Json = QJsonDocument::fromJson(QByteArray(List_Json->readAll()));
+
+    List_Json->close();
+
+    QJsonArray Root = Temp_Json.array();
+
+    Cloud->Get_Playlist_Details(Root.at(4).toObject().value("Id").toString());
+
+    Update_Music(true);
+}
+
+
+void PRIMARY::on_List_5_clicked()
+{
+    List_Json->open(QFile::ReadOnly);
+
+    QJsonDocument Temp_Json = QJsonDocument::fromJson(QByteArray(List_Json->readAll()));
+
+    List_Json->close();
+
+    QJsonArray Root = Temp_Json.array();
+
+    Cloud->Get_Playlist_Details(Root.at(5).toObject().value("Id").toString());
+
+    Update_Music(true);
+}
+
+
+void PRIMARY::on_List_6_clicked()
+{
+    List_Json->open(QFile::ReadOnly);
+
+    QJsonDocument Temp_Json = QJsonDocument::fromJson(QByteArray(List_Json->readAll()));
+
+    List_Json->close();
+
+    QJsonArray Root = Temp_Json.array();
+
+    Cloud->Get_Playlist_Details(Root.at(6).toObject().value("Id").toString());
+
+    Update_Music(true);
+}
+
+
+void PRIMARY::on_List_7_clicked()
+{
+    List_Json->open(QFile::ReadOnly);
+
+    QJsonDocument Temp_Json = QJsonDocument::fromJson(QByteArray(List_Json->readAll()));
+
+    List_Json->close();
+
+    QJsonArray Root = Temp_Json.array();
+
+    Cloud->Get_Playlist_Details(Root.at(7).toObject().value("Id").toString());
+
+    Update_Music(true);
+}
+
+
+void PRIMARY::on_List_8_clicked()
+{
+    List_Json->open(QFile::ReadOnly);
+
+    QJsonDocument Temp_Json = QJsonDocument::fromJson(QByteArray(List_Json->readAll()));
+
+    List_Json->close();
+
+    QJsonArray Root = Temp_Json.array();
+
+    Cloud->Get_Playlist_Details(Root.at(8).toObject().value("Id").toString());
+
+    Update_Music(true);
+}
+
+
+void PRIMARY::on_List_9_clicked()
+{
+    List_Json->open(QFile::ReadOnly);
+
+    QJsonDocument Temp_Json = QJsonDocument::fromJson(QByteArray(List_Json->readAll()));
+
+    List_Json->close();
+
+    QJsonArray Root = Temp_Json.array();
+
+    Cloud->Get_Playlist_Details(Root.at(9).toObject().value("Id").toString());
+
+    Update_Music(true);
+}
+

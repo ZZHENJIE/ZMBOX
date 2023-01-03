@@ -25,6 +25,8 @@ public:
     QString User_Name;//用户名
 
     void Client_Send(QString Message_Data);//客户端发送信息
+
+    void Server_Connection();//服务器连接
 private:
     QTcpSocket *Server = new QTcpSocket();//服务器套接字
 private slots:

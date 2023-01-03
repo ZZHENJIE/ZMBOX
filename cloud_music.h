@@ -11,6 +11,7 @@
 #include <QtNetwork/QNetworkRequest>
 #include <QtNetwork/QNetworkReply>
 #include <QEventLoop>
+#include <QFileInfo>
 #include "mthread.h"
 
 typedef struct Cloud//搜索数据结构体
@@ -37,7 +38,7 @@ public:
 
     QString Get_Music_Play();//获取歌曲播放链接
 
-    void Get_Search_Data(Cloud_Search_Data *Data_Arr,QString Text,QString Number,bool Array = true);//获取搜索数据 储存数据数组 搜索内容 返回数量
+    void Get_Search_Data(Cloud_Search_Data *Data_Arr,QString Text,QString Number);//获取搜索数据 储存数据数组 搜索内容 返回数量
 
     void Download_Music();//下载歌曲
 
@@ -45,6 +46,7 @@ public:
 
     void Get_Recommended_Playlist(QString Category = "流行");//获取类型推荐歌单
 
+    void Get_Playlist_Details(QString PlayList_Id);//获取歌单详情
 private:
     MThread *Download;//下载线程
 

@@ -51,6 +51,10 @@ private slots:
 
     void on_Tray_Close_clicked();//关闭托盘功能槽函数
 
+    void on_Room_Open_clicked();//开启聊天室功能槽函数
+
+    void on_Room_Close_clicked();//关闭聊天室功能槽函数
+
 signals:
     void Reboot_Signals();//重启软件信号
 
