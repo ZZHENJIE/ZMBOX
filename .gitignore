@@ -51,5 +51,6 @@ compile_commands.json
 # QtCreator local machine specific files for imported projects
 *creator.user*
 
-# Cmake
-build
+# Vs
+.vs
+x64
