@@ -1,8 +1,12 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QMainWindow>
+#include <QtWidgets/QMainWindow>
+#include <QtWidgets/QFileDialog>
 #include "function_interface.h"
+#include "player_interface.h"
+#include "search_interface.h"
+#include "set_interface.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -16,8 +20,15 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+public Q_SLOTS:
+    void Change_Background();
+Q_SIGNALS:
+
 private:
     Ui::MainWindow *ui;
-    Function_Interface *Finterface;
+    Function_Interface *FunctionInterface;
+    Player_Interface *PlayerInterface;
+    Search_Interface *SearchInterface;
+    Set_Interface *SetInterface;
 };
 #endif // MAINWINDOW_H
