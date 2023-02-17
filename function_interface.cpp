@@ -8,8 +8,6 @@ Function_Interface::Function_Interface(QWidget *parent) :
     ui->setupUi(this);
     this->move(0,0);
     this->show();
-
-    UI_Init();
 }
 
 void Function_Interface::UI_Init(QString Color_Info)

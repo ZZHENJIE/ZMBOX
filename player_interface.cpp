@@ -8,8 +8,6 @@ Player_Interface::Player_Interface(QWidget *parent) :
     ui->setupUi(this);
     this->move(0,600);
     this->show();
-
-    UI_Init();
 }
 
 void Player_Interface::UI_Init(QString Color_Info)

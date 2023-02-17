@@ -9,8 +9,6 @@ Set_Interface::Set_Interface(QWidget *parent) :
     this->move(100,90);
     this->show();
 
-    UI_Init();
-
     connect(ui->Set_Background_Button,&QPushButton::clicked,this,&Set_Interface::Set_Background);
     connect(ui->Confirm_Color,&QPushButton::clicked,this,&Set_Interface::Set_Theme);
     connect(ui->Repair,&QPushButton::clicked,this,&Set_Interface::Repair);
