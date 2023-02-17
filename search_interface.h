@@ -2,6 +2,7 @@
 #define SEARCH_INTERFACE_H
 
 #include <QtWidgets/QWidget>
+#include <QtWidgets/QAbstractItemView>
 
 namespace Ui {
 class Search_Interface;
@@ -15,7 +16,7 @@ public:
     explicit Search_Interface(QWidget *parent = nullptr);
     ~Search_Interface();
 
-    void UI_Init();
+    void UI_Init(QString Color_Info = "255,255,255,255");
 
 private:
     Ui::Search_Interface *ui;

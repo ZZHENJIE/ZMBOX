@@ -15,7 +15,7 @@ public:
     explicit Player_Interface(QWidget *parent = nullptr);
     ~Player_Interface();
 
-    void UI_Init();
+    void UI_Init(QString Color_Info = "255,255,255,255");
 
 private:
     Ui::Player_Interface *ui;

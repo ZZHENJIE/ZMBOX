@@ -20,8 +20,14 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+    void UI_Init();
+
 public Q_SLOTS:
-    void Change_Background();
+
+    void Change_Background(QString Image_Url);
+
+    void Change_Theme(QString Color_Info);
+
 Q_SIGNALS:
 
 private:

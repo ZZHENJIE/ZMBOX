@@ -13,23 +13,224 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <widget class="QLabel" name="Set_Background_Text">
+  <widget class="QWidget" name="Background" native="true">
    <property name="geometry">
     <rect>
-     <x>10</x>
-     <y>10</y>
-     <width>170</width>
+     <x>5</x>
+     <y>5</y>
+     <width>271</width>
      <height>50</height>
+    </rect>
+   </property>
+   <widget class="QLabel" name="Set_Background_Text">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>170</width>
+      <height>50</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>楷体</family>
+      <pointsize>20</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>设置背景图片</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="Set_Background_Button">
+    <property name="geometry">
+     <rect>
+      <x>180</x>
+      <y>5</y>
+      <width>80</width>
+      <height>40</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>选择图片</string>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QWidget" name="Theme" native="true">
+   <property name="geometry">
+    <rect>
+     <x>280</x>
+     <y>5</y>
+     <width>531</width>
+     <height>50</height>
+    </rect>
+   </property>
+   <widget class="QLabel" name="Set_Background_Text_2">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>170</width>
+      <height>50</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>楷体</family>
+      <pointsize>20</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>设置主题颜色</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="R">
+    <property name="geometry">
+     <rect>
+      <x>190</x>
+      <y>5</y>
+      <width>50</width>
+      <height>40</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>16</pointsize>
+     </font>
+    </property>
+    <property name="inputMask">
+     <string/>
+    </property>
+    <property name="maxLength">
+     <number>3</number>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+    <property name="placeholderText">
+     <string>R</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="G">
+    <property name="geometry">
+     <rect>
+      <x>260</x>
+      <y>5</y>
+      <width>50</width>
+      <height>40</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>16</pointsize>
+     </font>
+    </property>
+    <property name="inputMask">
+     <string/>
+    </property>
+    <property name="maxLength">
+     <number>3</number>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+    <property name="placeholderText">
+     <string>G</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="B">
+    <property name="geometry">
+     <rect>
+      <x>330</x>
+      <y>5</y>
+      <width>50</width>
+      <height>40</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>16</pointsize>
+     </font>
+    </property>
+    <property name="inputMask">
+     <string/>
+    </property>
+    <property name="maxLength">
+     <number>3</number>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+    <property name="placeholderText">
+     <string>B</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="A">
+    <property name="geometry">
+     <rect>
+      <x>400</x>
+      <y>5</y>
+      <width>50</width>
+      <height>40</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>16</pointsize>
+     </font>
+    </property>
+    <property name="inputMask">
+     <string/>
+    </property>
+    <property name="maxLength">
+     <number>3</number>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+    <property name="placeholderText">
+     <string>A</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="Confirm_Color">
+    <property name="geometry">
+     <rect>
+      <x>470</x>
+      <y>5</y>
+      <width>50</width>
+      <height>40</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>应用</string>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QPushButton" name="Repair">
+   <property name="geometry">
+    <rect>
+     <x>820</x>
+     <y>10</y>
+     <width>80</width>
+     <height>40</height>
     </rect>
    </property>
    <property name="font">
     <font>
-     <family>楷体</family>
-     <pointsize>20</pointsize>
+     <pointsize>12</pointsize>
     </font>
    </property>
    <property name="text">
-    <string>设置背景图片</string>
+    <string>修复应用</string>
    </property>
   </widget>
   <widget class="Line" name="line_1">
@@ -38,42 +239,14 @@
      <x>0</x>
      <y>60</y>
      <width>1180</width>
-     <height>5</height>
+     <height>1</height>
     </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(85, 85, 127);</string>
    </property>
    <property name="orientation">
     <enum>Qt::Horizontal</enum>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="Set_Background_Button">
-   <property name="geometry">
-    <rect>
-     <x>200</x>
-     <y>15</y>
-     <width>80</width>
-     <height>40</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <pointsize>10</pointsize>
-    </font>
-   </property>
-   <property name="text">
-    <string>选择图片</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="Background_Image">
-   <property name="geometry">
-    <rect>
-     <x>300</x>
-     <y>10</y>
-     <width>80</width>
-     <height>45</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string/>
    </property>
   </widget>
  </widget>

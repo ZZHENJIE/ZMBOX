@@ -15,7 +15,7 @@ public:
     explicit Function_Interface(QWidget *parent = nullptr);
     ~Function_Interface();
 
-    void UI_Init();
+    void UI_Init(QString Color_Info = "255,255,255,255");
 
 private:
     Ui::Function_Interface *ui;

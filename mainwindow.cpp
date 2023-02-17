@@ -15,17 +15,43 @@ MainWindow::MainWindow(QWidget *parent)
     SearchInterface = new Search_Interface(this);
     SetInterface = new Set_Interface(this);
 
+    UI_Init();
+
     connect(SetInterface,&Set_Interface::Change_Background,this,&MainWindow::Change_Background);
+    connect(SetInterface,&Set_Interface::Change_Theme,this,&MainWindow::Change_Theme);
 }
 
-void MainWindow::Change_Background()
+void MainWindow::Change_Theme(QString Color_Info)
 {
-    QString Image = QFileDialog::getOpenFileName(nullptr,"选择图片","C://","*.png");
+    FunctionInterface->UI_Init(Color_Info);
+    PlayerInterface->UI_Init(Color_Info);
+    SearchInterface->UI_Init(Color_Info);
+    SetInterface->UI_Init(Color_Info);
+}
 
-    if(!Image.isEmpty())
-    {
-        ui->Background->setPixmap(Image);
-    }
+void MainWindow::UI_Init()
+{
+    QFile Data_Json(".//Data//Set.json");
+
+    Data_Json.open(QFile::ReadOnly);
+
+    QJsonDocument Data_Doc = QJsonDocument::fromJson(Data_Json.readAll());
+
+    QJsonObject Data = Data_Doc.object();
+
+    ui->Background->setPixmap(Data.value("Background").toString());
+
+    FunctionInterface->UI_Init(Data.value("Theme").toString());
+    PlayerInterface->UI_Init(Data.value("Theme").toString());
+    SearchInterface->UI_Init(Data.value("Theme").toString());
+    SetInterface->UI_Init(Data.value("Theme").toString());
+
+    Data_Json.close();
+}
+
+void MainWindow::Change_Background(QString Image_Url)
+{
+    ui->Background->setPixmap(Image_Url);
 }
 
 MainWindow::~MainWindow()
