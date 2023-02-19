@@ -17,6 +17,8 @@
         > **歌词:** `http://music.163.com/api/song/media?id=/*歌曲ID*/`
 
         > **获取歌曲详情(无歌词):** `https://tenapi.cn/wyyinfo/?id=/*歌曲ID*/`
+
+        > **其他开发者写的API(需要部署)** `https://neteasecloudmusicapi.js.org/#/`
    * 需要申请
         > **官方API:** `https://developer.music.163.com/st/developer/`
 3. 酷狗音乐
