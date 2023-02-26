@@ -14,7 +14,7 @@
 typedef struct SEARCH_INFO
 {
     QString Song_Name;
-    QString Sing_Name;
+    QString Singer_Name;
     QString Id;
 
     QString Hash;

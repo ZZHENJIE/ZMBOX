@@ -16,7 +16,7 @@ Search_Info * NetMusic::Search(QString KeyWord,QString Offset)
 
         Data[i].Song_Name = Info.value("name").toString();
 
-        Data[i].Sing_Name = Info.value("artists").toArray().at(0).toObject().value("name").toString();
+        Data[i].Singer_Name = Info.value("artists").toArray().at(0).toObject().value("name").toString();
     }
 
     return Data;

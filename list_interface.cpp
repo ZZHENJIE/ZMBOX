@@ -65,7 +65,7 @@ void List_Interface::Search(QString KeyWord,int MusicPlatform)
     {
         QListWidgetItem * List = new QListWidgetItem();
 
-        List->setText(Data[i].Song_Name + "     " + Data[i].Sing_Name);
+        List->setText(Data[i].Song_Name + "     " + Data[i].Singer_Name);
 
         List->setSizeHint(QSize(1180,50));
 

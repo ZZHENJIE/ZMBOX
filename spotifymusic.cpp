@@ -16,7 +16,7 @@ Search_Info * SpotifyMusic::Search(QString KeyWord,QString Offset)
 
         Data[i].Song_Name = Info.value("name").toString();
 
-        Data[i].Sing_Name = Info.value("artists").toArray().at(0).toObject().value("name").toString();
+        Data[i].Singer_Name = Info.value("artists").toArray().at(0).toObject().value("name").toString();
     }
 
     return Data;
@@ -42,7 +42,7 @@ Search_Info * SpotifyMusic::KuGouSearch(QString KeyWord,QString Offset)
 
         Data[i].Song_Name = Info.value("songname").toString();
 
-        Data[i].Sing_Name = Info.value("singername").toString();
+        Data[i].Singer_Name = Info.value("singername").toString();
     }
 
     return Data;
