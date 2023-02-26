@@ -9,8 +9,8 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
+find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets Network)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets Network)
 
 set(PROJECT_SOURCES
         main.cpp
@@ -19,18 +19,27 @@ set(PROJECT_SOURCES
         player_interface.cpp
         search_interface.cpp
         set_interface.cpp
+        other.cpp
+        netmusic.cpp
+        list_interface.cpp
+        spotifymusic.cpp
 
         mainwindow.h
         function_interface.h
         player_interface.h
         search_interface.h
         set_interface.h
+        other.h
+        netmusic.h
+        list_interface.h
+        spotifymusic.h
 
         mainwindow.ui
         function_interface.ui
         player_interface.ui
         search_interface.ui
         set_interface.ui
+        list_interface.ui
 
         Res.qrc
 )
@@ -58,7 +67,7 @@ else()
     endif()
 endif()
 
-target_link_libraries(ZMBOX-Remastered PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
+target_link_libraries(ZMBOX-Remastered PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Network)
 
 set_target_properties(ZMBOX-Remastered PROPERTIES
     MACOSX_BUNDLE_GUI_IDENTIFIER my.example.com

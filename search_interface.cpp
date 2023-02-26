@@ -8,6 +8,13 @@ Search_Interface::Search_Interface(QWidget *parent) :
     ui->setupUi(this);
     this->move(100,0);
     this->show();
+
+    connect(ui->Search_Button,&QPushButton::clicked,[=](){
+        if(ui->Search_Text->text().isEmpty() == false)
+        {
+            emit Search(ui->Search_Text->text(),ui->Select_Platform->currentIndex());
+        }
+    });
 }
 
 void Search_Interface::UI_Init(QString Color_Info)
@@ -16,8 +23,8 @@ void Search_Interface::UI_Init(QString Color_Info)
     ui->Search_Button->setToolTip("搜索");
 
     ui->Select_Platform->addItem(QIcon(":/Resource/Cloud.png"),"网易云音乐");
+        ui->Select_Platform->addItem(QIcon(":/Resource/QQ.png"),"QQ音乐");
     ui->Select_Platform->addItem(QIcon(":/Resource/KuGou.png"),"酷狗音乐");
-    ui->Select_Platform->addItem(QIcon(":/Resource/QQ.png"),"QQ音乐");
     ui->Select_Platform->addItem(QIcon(":/Resource/Spotify.png"),"Spotify");
 
     ui->Back_Button->setStyleSheet("background-color: rgba(" + Color_Info + ");border-radius: 5px;");

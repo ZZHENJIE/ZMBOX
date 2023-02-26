@@ -18,6 +18,13 @@ public:
 
     void UI_Init(QString Color_Info = "255,255,255,255");
 
+public Q_SLOTS:
+
+
+Q_SIGNALS:
+
+    void Search(QString KeyWord,int MusicPlatform);
+
 private:
     Ui::Search_Interface *ui;
 };

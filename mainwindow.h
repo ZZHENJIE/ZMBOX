@@ -3,10 +3,12 @@
 
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QFileDialog>
+#include <QProcess>
 #include "function_interface.h"
 #include "player_interface.h"
 #include "search_interface.h"
 #include "set_interface.h"
+#include "list_interface.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -28,13 +30,20 @@ public Q_SLOTS:
 
     void Change_Theme(QString Color_Info);
 
+    void Search(QString KeyWord,int MusicPlatform);
+
 Q_SIGNALS:
 
 private:
     Ui::MainWindow *ui;
+
+    QProcess Net_Music;
+    QProcess Spotify_KuGou;
+
     Function_Interface *FunctionInterface;
     Player_Interface *PlayerInterface;
     Search_Interface *SearchInterface;
     Set_Interface *SetInterface;
+    List_Interface *ListInterface;
 };
 #endif // MAINWINDOW_H

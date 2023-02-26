@@ -6,6 +6,9 @@
 #include <QtWidgets/QMessageBox>
 #include <QtCore/QJsonObject>
 #include <QtCore/QJsonDocument>
+#include <QtWidgets/QMessageBox>
+#include <QDesktopServices>
+#include "other.h"
 
 namespace Ui {
 class Set_Interface;
@@ -28,6 +31,12 @@ public Q_SLOTS:
     void Set_Theme();
 
     void Repair();
+
+    void Net_Log_In();
+
+    void Net_Log_Out();
+
+    void Updata_Info();
 
 Q_SIGNALS:
 

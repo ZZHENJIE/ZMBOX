@@ -26,5 +26,6 @@
         <file>Resource/Set.png</file>
         <file>Resource/Spotify.png</file>
         <file>Resource/Vertical_Scroll_bar.png</file>
+        <file>Resource/User.png</file>
     </qresource>
 </RCC>
