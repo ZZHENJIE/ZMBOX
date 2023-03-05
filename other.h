@@ -1,26 +1,48 @@
 #ifndef OTHER_H
 #define OTHER_H
 
+#include <QtWidgets/QWidget>
+#include <QtWidgets/QMainWindow>
+#include <QtWidgets/QFileDialog>
+#include <QMessageBox>
+#include <QPushButton>
+#include <QLabel>
+
+#include <QPixmap>
+#include <QListWidgetItem>
+#include <QFontDatabase>
+#include <QFont>
+#include <QIcon>
+
 #include <QtCore/QObject>
+#include <QtCore/QEventLoop>
+
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include <QNetworkRequest>
-#include <QtCore/QEventLoop>
-#include <QPixmap>
+
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonArray>
+#include <QFile>
+#include <QDir>
+#include <QMediaPlayer>
+#include <QAudioOutput>
 
-typedef struct SEARCH_INFO
+#include <QProcess>
+#include <QDesktopServices>
+
+typedef struct SONG_INFO
 {
+    int MusicPlatform;
     QString Song_Name;
     QString Singer_Name;
-    QString Id;
 
+    QString Id;
     QString Hash;
     QString Album_id;
     QString Album_audio_id;
-}Search_Info;
+}Song_Info;
 
 typedef struct SONG_LIST_INFO
 {

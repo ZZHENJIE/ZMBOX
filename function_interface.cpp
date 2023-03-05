@@ -8,9 +8,19 @@ Function_Interface::Function_Interface(QWidget *parent) :
     ui->setupUi(this);
     this->move(0,0);
     this->show();
+
+    connect(ui->Set,&QPushButton::clicked,[=](){
+        emit Set();
+    });
+    connect(ui->Play,&QPushButton::clicked,[=](){
+        emit Play();
+    });
+    connect(ui->Like,&QPushButton::clicked,[=](){
+        emit Like();
+    });
 }
 
-void Function_Interface::UI_Init(QString Color_Info)
+void Function_Interface::UI_Init(QFont Font,QString Color_Info)
 {
     ui->Set->setToolTip("设置");
     ui->Like->setToolTip("喜欢列表");

@@ -20,6 +20,10 @@ Set_Interface::Set_Interface(QWidget *parent) :
 void Set_Interface::Net_Log_In()
 {
     QDesktopServices::openUrl(QUrl("http://127.0.0.1:8385/qrlogin.html"));
+    if(QMessageBox::question(0,"提示","是否登入成功!",QMessageBox::Yes|QMessageBox::No) == QMessageBox::Yes)
+    {
+        emit ReBoot_Nodejs();
+    }
 }
 
 void Set_Interface::Net_Log_Out()
@@ -27,6 +31,7 @@ void Set_Interface::Net_Log_Out()
     Other::GetUrlData("http://127.0.0.1:8385/logout");
     ui->Net_Name->setText("未登入");
     ui->Net_Image->setPixmap(QPixmap(":/Resource/Cloud.png"));
+    emit ReBoot_Nodejs();
 }
 
 void Set_Interface::Updata_Info()
@@ -69,6 +74,7 @@ void Set_Interface::Updata_Info()
     }
     else
     {
+        emit ReBoot_Nodejs();
         QMessageBox::information(0,"提示","获取用户数据失败!");
     }
 }
@@ -126,6 +132,14 @@ void Set_Interface::Repair()
     Data_Json.write(Data_Doc.toJson());
 
     Data_Json.close();
+
+    Data_Json.setFileName(".//Data//Play.json");
+    Data_Json.open(QFile::WriteOnly);
+    Data_Json.close();
+
+    Data_Json.setFileName(".//Data//Play.json");
+    Data_Json.open(QFile::WriteOnly);
+    Data_Json.close();
 }
 
 void Set_Interface::Set_Theme()
@@ -162,7 +176,7 @@ void Set_Interface::Set_Theme()
     }
 }
 
-void Set_Interface::UI_Init(QString Color_Info)
+void Set_Interface::UI_Init(QFont Font,QString Color_Info)
 {
     ui->Set_Background_Button->setToolTip("选择背景图片");
     ui->Confirm_Color->setToolTip("应用颜色");
@@ -181,6 +195,21 @@ void Set_Interface::UI_Init(QString Color_Info)
     ui->G->setStyleSheet("background-color: rgba(" + Color_Info + ");border-radius: 5px;");
     ui->B->setStyleSheet("background-color: rgba(" + Color_Info + ");border-radius: 5px;");
     ui->A->setStyleSheet("background-color: rgba(" + Color_Info + ");border-radius: 5px;");
+
+    ui->Set_Background_Text->setFont(Font);
+    ui->Repair->setFont(Font);
+    ui->Set_Background_Button->setFont(Font);
+    ui->Set_Background_Text_2->setFont(Font);
+    ui->R->setFont(Font);
+    ui->G->setFont(Font);
+    ui->B->setFont(Font);
+    ui->A->setFont(Font);
+    ui->Confirm_Color->setFont(Font);
+    ui->Log_In_Text->setFont(Font);
+    ui->Updata_Info->setFont(Font);
+    ui->Net_Name->setFont(Font);
+    ui->Net_Log_In->setFont(Font);
+    ui->Net_Log_Out->setFont(Font);
 }
 
 Set_Interface::~Set_Interface()

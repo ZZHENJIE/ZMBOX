@@ -1,13 +1,6 @@
 #ifndef SET_INTERFACE_H
 #define SET_INTERFACE_H
 
-#include <QtWidgets/QWidget>
-#include <QtWidgets/QFileDialog>
-#include <QtWidgets/QMessageBox>
-#include <QtCore/QJsonObject>
-#include <QtCore/QJsonDocument>
-#include <QtWidgets/QMessageBox>
-#include <QDesktopServices>
 #include "other.h"
 
 namespace Ui {
@@ -22,7 +15,7 @@ public:
     explicit Set_Interface(QWidget *parent = nullptr);
     ~Set_Interface();
 
-    void UI_Init(QString Color_Info = "255,255,255,255");
+    void UI_Init(QFont Font,QString Color_Info = "255,255,255,255");
 
 public Q_SLOTS:
 
@@ -43,6 +36,8 @@ Q_SIGNALS:
     void Change_Theme(QString Color_Info);
 
     void Change_Background(QString Image_Url);
+
+    void ReBoot_Nodejs();
 
 private:
     Ui::Set_Interface *ui;

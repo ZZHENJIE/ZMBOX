@@ -1,7 +1,7 @@
 #ifndef FUNCTION_INTERFACE_H
 #define FUNCTION_INTERFACE_H
 
-#include <QtWidgets/QWidget>
+#include "other.h"
 
 namespace Ui {
 class Function_Interface;
@@ -15,7 +15,17 @@ public:
     explicit Function_Interface(QWidget *parent = nullptr);
     ~Function_Interface();
 
-    void UI_Init(QString Color_Info = "255,255,255,255");
+    void UI_Init(QFont Font,QString Color_Info = "255,255,255,255");
+
+public Q_SLOTS:
+    
+Q_SIGNALS:
+
+    void Set();
+
+    void Play();
+
+    void Like();
 
 private:
     Ui::Function_Interface *ui;

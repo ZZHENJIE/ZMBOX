@@ -8,41 +8,468 @@ List_Interface::List_Interface(QWidget *parent) :
     ui->setupUi(this);
     this->move(100,90);
     this->show();
-    GetTheRecommendedPlaylist(0);
+
+    Back();
+    Read_List();
+
+    //GetTheRecommendedPlaylist();
 }
 
 List_Interface::~List_Interface()
 {
+    Save_List();
     delete ui;
 }
 
-void List_Interface::UI_Init(QString Color_Info)
+void List_Interface::Clear_Item()
 {
-    ui->List->setStyleSheet("background-color: rgba(" + Color_Info + ");");
-    ui->Song_List->setStyleSheet("background-color: rgba(" + Color_Info + ");");
+    ui->Song_List->clear();
 
-    ui->Song_List->setIconSize(QSize(165,165));
+    emit Clear_Item_Signals();
+
+    for(int i = 0; i < ui->Song_List->count(); i ++)
+    {
+        ui->Song_List->takeItem(i);
+    }
+
+    ui->Song_List->setFont(Font_);
+}
+
+void List_Interface::Next_Offset()
+{
+    switch(State)
+    {
+        case 1:
+        {
+            if(Like_List.count() - Offset_Count * 10 > 0)
+            {
+                Offset_Count ++;
+                Like_List_Show();
+            }
+            break;
+        }
+        case 2:
+        {
+            if(Play_List.count() - Offset_Count * 10 > 0)
+            {
+                Offset_Count ++;
+                Play_List_Show();
+            }
+            break;
+        }
+        case 30:
+        {
+            Offset_Count ++;
+            Search(Search_KeyWord,0,Offset_Count);
+            break;
+        }
+        case 31:
+        {
+            Offset_Count ++;
+            Search(Search_KeyWord,1,Offset_Count);
+            break;
+        }
+        case 32:
+        {
+            Offset_Count ++;
+            Search(Search_KeyWord,2,Offset_Count);
+            break;
+        }
+        case 33:
+        {
+            Offset_Count ++;
+            Search(Search_KeyWord,3,Offset_Count);
+            break;
+        }
+    }
+}
+
+void List_Interface::Back_Offset()
+{
+    if(Offset_Count > 1)
+    {
+        Offset_Count --;
+        switch(State)
+        {
+            case 1:
+            {
+                Like_List_Show();
+                break;
+            }
+            case 2:
+            {
+                Play_List_Show();
+                break;
+            }
+            case 30:
+            {
+                Search(Search_KeyWord,0,Offset_Count);
+                break;
+            }
+            case 31:
+            {
+                Search(Search_KeyWord,1,Offset_Count);
+                break;
+            }
+            case 32:
+            {
+                Search(Search_KeyWord,2,Offset_Count);
+                break;
+            }
+            case 33:
+            {
+                Search(Search_KeyWord,3,Offset_Count);
+                break;
+            }
+        }
+    }
+}
+
+void List_Interface::Play_List_Show()
+{
+    ui->Song_List_List->setVisible(false);
+    ui->Song_List_Widget->setVisible(true);
+    Clear_Item();
+
+    if(State != 2)
+    {
+        Offset_Count = 1;
+        State = 2;
+    }
+
+    for(int i = (Offset_Count * 10) - 10; i < (Offset_Count * 10 > Play_List.count() ? Play_List.count() : Offset_Count * 10) ; i ++)
+    {
+        QListWidgetItem * QListItem = new QListWidgetItem;
+        MListWidgetItem * MListItem = new MListWidgetItem;
+
+        QListItem->setSizeHint(QSize(1180, 70));
+
+        MListItem->Play_Like_List(Play_List.at(i),i);
+
+        ui->Song_List->addItem(QListItem);
+
+        ui->Song_List->setItemWidget(QListItem, MListItem);
+
+        connect(this,&List_Interface::Clear_Item_Signals,MListItem,&MListWidgetItem::Clear_Item);
+        connect(MListItem,&MListWidgetItem::Delete_Song,[=](short SerialNumber){
+            Play_List.removeAt(SerialNumber);
+            Play_List_Show();
+        });
+        connect(MListItem,&MListWidgetItem::Play_Select_Song,[=](short SerialNumber){
+            Play_SerialNumber = SerialNumber;
+            emit Play_Select_Song(Play_List.at(Play_SerialNumber),Play_SerialNumber);
+        });
+
+        switch(Play_List.at(i).MusicPlatform)
+        {
+            case 0:
+            {
+                QListItem->setIcon(QIcon(":/Resource/Cloud.png"));
+                break;
+            }
+            case 1:
+            {
+                QListItem->setIcon(QIcon(":/Resource/QQ.png"));
+                break;
+            }
+            case 2:
+            {
+                QListItem->setIcon(QIcon(":/Resource/KuGou.png"));
+                break;
+            }
+            case 3:
+            {
+                QListItem->setIcon(QIcon(":/Resource/Spotify.png"));
+                break;
+            }
+        }
+    }
+}
+
+void List_Interface::Like_List_Show()
+{
+    ui->Song_List_List->setVisible(false);
+    ui->Song_List_Widget->setVisible(true);
+    Clear_Item();
+
+    if(State != 1)
+    {
+        Offset_Count = 1;
+        State = 1;
+    }
+
+    for(int i = (Offset_Count * 10) - 10; i < (Offset_Count * 10 > Like_List.count() ? Like_List.count() : Offset_Count * 10) ; i ++)
+    {
+        QListWidgetItem * QListItem = new QListWidgetItem;
+        MListWidgetItem * MListItem = new MListWidgetItem;
+
+        QListItem->setSizeHint(QSize(1180, 70));
+
+        MListItem->Play_Like_List(Like_List.at(i),i);
+
+        ui->Song_List->addItem(QListItem);
+
+        ui->Song_List->setItemWidget(QListItem, MListItem);
+
+        connect(this,&List_Interface::Clear_Item_Signals,MListItem,&MListWidgetItem::Clear_Item);
+        connect(MListItem,&MListWidgetItem::Delete_Song,[=](short SerialNumber){
+            Like_List.removeAt(SerialNumber);
+            Like_List_Show();
+        });
+        connect(MListItem,&MListWidgetItem::Play_Select_Song,[=](short SerialNumber){
+            bool Is_Have = false;
+
+            for(int i = 0; i < Play_List.count(); i++)
+            {
+                if(Like_List.at(SerialNumber).MusicPlatform == Play_List.at(i).MusicPlatform && (Like_List.at(SerialNumber).Id == Play_List.at(i).Id || Like_List.at(SerialNumber).Hash == Play_List.at(i).Hash))
+                {
+                    Play_SerialNumber = i;
+                    Is_Have = true;
+                    emit Play_Select_Song(Play_List.at(i),i);
+                    break;
+                }
+            }
+
+            if(Is_Have == false)
+            {
+                Play_List.append(Like_List.at(SerialNumber));
+
+                Play_SerialNumber = Play_List.count() - 1;
+
+                emit Play_Select_Song(Play_List.at(Play_SerialNumber),Play_SerialNumber);
+            }
+        });
+
+        switch(Like_List.at(i).MusicPlatform)
+        {
+            case 0:
+            {
+                QListItem->setIcon(QIcon(":/Resource/Cloud.png"));
+                break;
+            }
+            case 1:
+            {
+                QListItem->setIcon(QIcon(":/Resource/QQ.png"));
+                break;
+            }
+            case 2:
+            {
+                QListItem->setIcon(QIcon(":/Resource/KuGou.png"));
+                break;
+            }
+            case 3:
+            {
+                QListItem->setIcon(QIcon(":/Resource/Spotify.png"));
+                break;
+            }
+        }
+    }
+}
+
+void List_Interface::Read_List()
+{
+    //播放列表
+
+    QFile Data_Json(".//Data//Play.json");
+
+    Data_Json.open(QFile::ReadOnly);
+
+    QJsonDocument Json_Doc = QJsonDocument::fromJson(Data_Json.readAll());
+
+    Data_Json.close();
+
+    if(Json_Doc.isEmpty() == false)
+    {
+        QJsonArray Data = Json_Doc.array();
+
+        for(int i = 0; i < Data.size(); i ++)
+        {
+            Song_Info Temp;
+
+            Temp.Song_Name = Data.at(i).toObject().value("Song_Name").toString();
+            Temp.Singer_Name = Data.at(i).toObject().value("Singer_Name").toString();
+            Temp.MusicPlatform = Data.at(i).toObject().value("MusicPlatform").toString().toInt();
+
+            if(Temp.MusicPlatform == 2)
+            {
+                Temp.Hash = Data.at(i).toObject().value("Hash").toString();
+                Temp.Album_id = Data.at(i).toObject().value("Album_id").toString();
+                Temp.Album_audio_id = Data.at(i).toObject().value("Album_audio_id").toString();
+            }
+            else
+            {
+                Temp.Id = Data.at(i).toObject().value("Id").toString();
+            }
+
+            Play_List.append(Temp);
+        }
+    }
+
+    //喜欢列表
+
+    Data_Json.setFileName(".//Data//Like.json");
+
+    Data_Json.open(QFile::ReadOnly);
+
+    Json_Doc = QJsonDocument::fromJson(Data_Json.readAll());
+
+    Data_Json.close();
+
+    if(Json_Doc.isEmpty() == false)
+    {
+        QJsonArray Data = Json_Doc.array();
+
+        for(int i = 0; i < Data.size(); i ++)
+        {
+            Song_Info Temp;
+
+            Temp.Song_Name = Data.at(i).toObject().value("Song_Name").toString();
+            Temp.Singer_Name = Data.at(i).toObject().value("Singer_Name").toString();
+            Temp.MusicPlatform = Data.at(i).toObject().value("MusicPlatform").toString().toInt();
+
+            if(Temp.MusicPlatform == 2)
+            {
+                Temp.Hash = Data.at(i).toObject().value("Hash").toString();
+                Temp.Album_id = Data.at(i).toObject().value("Album_id").toString();
+                Temp.Album_audio_id = Data.at(i).toObject().value("Album_audio_id").toString();
+            }
+            else
+            {
+                Temp.Id = Data.at(i).toObject().value("Id").toString();
+            }
+
+            Like_List.append(Temp);
+        }
+    }
+}
+
+void List_Interface::Save_List()
+{
+    //播放列表
+
+    QFile Data_Json(".//Data//Play.json");
+
+    QJsonDocument Json_Doc;
+
+    if(Play_List.isEmpty() == false)
+    {
+        Data_Json.open(QFile::WriteOnly);
+
+        QJsonArray Play_Data;
+
+        for(int i = 0; i < Play_List.count(); i ++)
+        {
+            QJsonObject Temp;
+            Temp.insert("Song_Name",Play_List.at(i).Song_Name);
+            Temp.insert("Singer_Name",Play_List.at(i).Singer_Name);
+            Temp.insert("MusicPlatform",QString::number(Play_List.at(i).MusicPlatform));
+
+            if(Play_List.at(i).MusicPlatform == 2)
+            {
+                Temp.insert("Hash",Play_List.at(i).Hash);
+                Temp.insert("Album_id",Play_List.at(i).Album_id);
+                Temp.insert("Album_audio_id",Play_List.at(i).Album_audio_id);
+            }
+            else
+            {
+                Temp.insert("Id",Play_List.at(i).Id);
+            }
+            Play_Data.append(Temp);
+        }
+
+        Json_Doc.setArray(Play_Data);
+
+        Data_Json.write(Json_Doc.toJson());
+
+        Data_Json.close();
+    }
+
+    //喜欢列表
+
+    Data_Json.setFileName(".//Data//Like.json");
+
+    if(Like_List.isEmpty() == false)
+    {
+
+        Data_Json.open(QFile::WriteOnly);
+
+        QJsonArray Like_Data;
+    
+        for(int i = 0; i < Like_List.count(); i ++)
+        {
+            QJsonObject Temp;
+            Temp.insert("Song_Name",Like_List.at(i).Song_Name);
+            Temp.insert("Singer_Name",Like_List.at(i).Singer_Name);
+            Temp.insert("MusicPlatform",QString::number(Like_List.at(i).MusicPlatform));
+
+            if(Like_List.at(i).MusicPlatform == 2)
+            {
+                Temp.insert("Hash",Like_List.at(i).Hash);
+                Temp.insert("Album_id",Like_List.at(i).Album_id);
+                Temp.insert("Album_audio_id",Like_List.at(i).Album_audio_id);
+            }
+            else
+            {
+                Temp.insert("Id",Like_List.at(i).Id);
+            }
+            Like_Data.append(Temp);
+        }
+
+        Json_Doc.setArray(Like_Data);
+
+        Data_Json.write(Json_Doc.toJson());
+
+        Data_Json.close();
+    }
+}
+
+void List_Interface::Back()
+{
+    ui->Song_List_List->setVisible(true);
+    ui->Song_List_Widget->setVisible(false);
+    Clear_Item();
+}
+
+void List_Interface::UI_Init(QFont Font,QString Color_Info)
+{
+    ui->Song_List->setStyleSheet("background-color: rgba(" + Color_Info + ");border-radius: 10px;");
+    ui->Song_List_List->setStyleSheet("background-color: rgba(" + Color_Info + ");border-radius: 10px;");
+
+    ui->Song_List_List->setIconSize(QSize(165,165));
+    ui->Song_List_List->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    ui->Song_List_List->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+
+    ui->Song_List->setIconSize(QSize(55,55));
     ui->Song_List->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     ui->Song_List->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
-    ui->List->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    ui->List->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    connect(ui->Next,&QPushButton::clicked,this,&List_Interface::Next_Offset);
+    connect(ui->Back,&QPushButton::clicked,this,&List_Interface::Back_Offset);
+
+    Font_ = Font;
 }
 
-void List_Interface::Search(QString KeyWord,int MusicPlatform)
+void List_Interface::Search(QString KeyWord,int MusicPlatform,int Offset)
 {
-    ui->List->setVisible(true);
-    ui->Song_List->setVisible(false);
+    ui->Song_List_List->setVisible(false);
+    ui->Song_List_Widget->setVisible(true);
 
-    ui->List->clear();
+    Clear_Item();
 
-    Search_Info * Data = new Search_Info;
+    Song_Info * Data = new Song_Info;
+
+    if(Search_KeyWord != KeyWord || State - 30 != MusicPlatform)
+    {
+        Offset_Count = 1;
+        Search_KeyWord = KeyWord;
+    }
 
     switch(MusicPlatform)//0 网易云音乐 1 QQ音乐 2 酷狗音乐 3 Spotify
     {
         case 0:
         {
-            Data = NetMusic::Search(KeyWord);
+            Data = NetMusic::Search(KeyWord,QString::number(Offset));
+            State = 30;
             break;
         }
         case 1:
@@ -51,25 +478,84 @@ void List_Interface::Search(QString KeyWord,int MusicPlatform)
         }
         case 2:
         {
-            Data = SpotifyMusic::KuGouSearch(KeyWord);
+            Data = SpotifyMusic::KuGouSearch(KeyWord,QString::number(Offset));
+            State = 32;
             break;
         }
         case 3:
         {
-            Data = SpotifyMusic::Search(KeyWord);
+            Data = SpotifyMusic::Search(KeyWord,QString::number(Offset - 1));
+            State = 33;
             break;
         }
     }
 
     for(int i = 0; i < 10; i++)
     {
-        QListWidgetItem * List = new QListWidgetItem();
+        QListWidgetItem * QListItem = new QListWidgetItem;
+        MListWidgetItem * MListItem = new MListWidgetItem;
 
-        List->setText(Data[i].Song_Name + "     " + Data[i].Singer_Name);
+        Data[i].MusicPlatform = MusicPlatform;
 
-        List->setSizeHint(QSize(1180,50));
+        QListItem->setSizeHint(QSize(1180, 70));
 
-        ui->List->addItem(List);
+        MListItem->Search(Data[i]);
+
+        ui->Song_List->addItem(QListItem);
+
+        ui->Song_List->setItemWidget(QListItem, MListItem);
+
+        connect(MListItem,&MListWidgetItem::Add_Play,[=](Song_Info Data){
+            bool Is_Have = false;
+
+            for(int i = 0; i < Play_List.count();i++)
+            {
+                if(Play_List.at(i).MusicPlatform == Data.MusicPlatform)
+                {
+                    if((Play_List.at(i).MusicPlatform == 0 || Play_List.at(i).MusicPlatform == 3) && Data.Id == Play_List.at(i).Id)
+                    {
+                        Is_Have = true;
+                        break;
+                    }
+                    else if(Play_List.at(i).MusicPlatform == 2 && Data.Hash == Play_List.at(i).Hash)
+                    {
+                        Is_Have = true;
+                        break;
+                    }
+                }
+            }
+
+            if(Is_Have == false)
+            {
+                Play_List.append(Data);
+            }
+        });
+        connect(MListItem,&MListWidgetItem::Add_Like,[=](Song_Info Data){
+            bool Is_Have = false;
+
+            for(int i = 0; i < Like_List.count();i++)
+            {
+                if(Like_List.at(i).MusicPlatform == Data.MusicPlatform)
+                {
+                    if((Like_List.at(i).MusicPlatform == 0 || Like_List.at(i).MusicPlatform == 3) && Data.Id == Like_List.at(i).Id)
+                    {
+                        Is_Have = true;
+                        break;
+                    }
+                    else if(Like_List.at(i).MusicPlatform == 2 && Data.Hash == Like_List.at(i).Hash)
+                    {
+                        Is_Have = true;
+                        break;
+                    }
+                }
+            }
+            
+            if(Is_Have == false)
+            {
+                Like_List.append(Data);
+            }
+        });
+        connect(this,&List_Interface::Clear_Item_Signals,MListItem,&MListWidgetItem::Clear_Item);
     }
 
     delete []Data;
@@ -78,10 +564,11 @@ void List_Interface::Search(QString KeyWord,int MusicPlatform)
 
 void List_Interface::GetTheRecommendedPlaylist(int MusicPlatform)
 {
-    ui->List->setVisible(false);
-    ui->Song_List->setVisible(true);
+    Back();
 
-    ui->Song_List->clear();
+    State = 4;
+
+    ui->Song_List_List->clear();
 
     Song_List_Info * Data = new Song_List_Info;
 
@@ -106,17 +593,18 @@ void List_Interface::GetTheRecommendedPlaylist(int MusicPlatform)
         }
     }
 
-    for(int i = 0; i < 20; i++)
+    for(int i = 0; i < 15; i++)
     {
-        QListWidgetItem * List = new QListWidgetItem();
+        QListWidgetItem * QListItem = new QListWidgetItem;
+        MListWidgetItem * MListItem = new MListWidgetItem;
 
-        List->setIcon(QIcon(Other::UrlToPixmap(Data[i].List_Image)));
+        QListItem->setSizeHint(QSize(165, 165));
 
-        List->setToolTip(Data[i].List_Name);
+        MListItem->Song_List(Data[i]);
 
-        List->setSizeHint(QSize(165,165));
+        ui->Song_List_List->addItem(QListItem);
 
-        ui->Song_List->addItem(List);
+        ui->Song_List_List->setItemWidget(QListItem, MListItem);
     }
 
     delete []Data;

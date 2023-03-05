@@ -8,7 +8,7 @@
         <file>Resource/Chat_Room.png</file>
         <file>Resource/Cloud.png</file>
         <file>Resource/KuGou.png</file>
-        <file>Resource/Like.png</file>
+        <file>Resource/Like_List.png</file>
         <file>Resource/List_Load.gif</file>
         <file>Resource/Logo.ico</file>
         <file>Resource/Logo.png</file>
@@ -27,5 +27,7 @@
         <file>Resource/Spotify.png</file>
         <file>Resource/Vertical_Scroll_bar.png</file>
         <file>Resource/User.png</file>
+        <file>Resource/Delete.png</file>
+        <file>Resource/Download.png</file>
     </qresource>
 </RCC>

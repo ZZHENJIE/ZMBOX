@@ -7,11 +7,15 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
     this->setWindowTitle("ZMBOX");//设置窗口标题
-    this->setWindowIcon(QIcon(":/Resource/Logo.ico"));//设置窗口图标
     this->setFixedSize(QSize(1280,720));//设置窗口固定大小
 
-    Net_Music.start(".\\API\\网易云音乐API.exe");
-    Spotify_KuGou.start(".\\API\\Spotify-Kugou-API.exe");
+    Net_Music = new QProcess(this);
+    Spotify_KuGou = new QProcess(this);
+    Font = new QFont(QFontDatabase::applicationFontFamilies(QFontDatabase::addApplicationFont(":/Resource/QingNingYouYuan.ttf")).at(0),15);
+    Font->setLetterSpacing(QFont::PercentageSpacing,120);
+
+    Net_Music->start(".\\API\\网易云音乐API.exe");
+    Spotify_KuGou->start(".\\API\\Spotify-Kugou-API.exe");
 
     FunctionInterface = new Function_Interface(this);
     PlayerInterface = new Player_Interface(this);
@@ -24,6 +28,30 @@ MainWindow::MainWindow(QWidget *parent)
     connect(SetInterface,&Set_Interface::Change_Background,this,&MainWindow::Change_Background);
     connect(SetInterface,&Set_Interface::Change_Theme,this,&MainWindow::Change_Theme);
     connect(SearchInterface,&Search_Interface::Search,this,&MainWindow::Search);
+    connect(ListInterface,&List_Interface::Play_Select_Song,PlayerInterface,&Player_Interface::Play_Select_Song);
+    connect(FunctionInterface,&Function_Interface::Play,[=](){
+        SetInterface->setVisible(false);
+        ListInterface->setVisible(true);
+        ListInterface->Play_List_Show();
+    });
+    connect(FunctionInterface,&Function_Interface::Like,[=](){
+        SetInterface->setVisible(false);
+        ListInterface->setVisible(true);
+        ListInterface->Like_List_Show();
+    });
+    connect(FunctionInterface,&Function_Interface::Set,[=](){
+        SetInterface->setVisible(true);
+        ListInterface->setVisible(false);
+    });
+    connect(SearchInterface,&Search_Interface::Back,[=](){
+        SetInterface->setVisible(false);
+        ListInterface->setVisible(true);
+        ListInterface->Back();
+    });
+    connect(SetInterface,&Set_Interface::ReBoot_Nodejs,[=](){
+        Net_Music->close();
+        Net_Music->start(".\\API\\网易云音乐API.exe");
+    });
 }
 
 void MainWindow::Search(QString KeyWord,int MusicPlatform)
@@ -57,13 +85,13 @@ void MainWindow::UI_Init()
 
     ui->Background->setPixmap(Data.value("Background").toString());
 
-    FunctionInterface->UI_Init(Data.value("Theme").toString());
-    PlayerInterface->UI_Init(Data.value("Theme").toString());
-    SearchInterface->UI_Init(Data.value("Theme").toString());
-    SetInterface->UI_Init(Data.value("Theme").toString());
-    ListInterface->UI_Init(Data.value("Theme").toString());
+    FunctionInterface->UI_Init(*Font,Data.value("Theme").toString());
+    PlayerInterface->UI_Init(*Font,Data.value("Theme").toString());
+    SearchInterface->UI_Init(*Font,Data.value("Theme").toString());
+    SetInterface->UI_Init(*Font,Data.value("Theme").toString());
+    ListInterface->UI_Init(*Font,Data.value("Theme").toString());
 
-    Data_Json.close();
+    QApplication::setFont(*Font);
 }
 
 void MainWindow::Change_Background(QString Image_Url)
@@ -73,8 +101,12 @@ void MainWindow::Change_Background(QString Image_Url)
 
 MainWindow::~MainWindow()
 {
-    Net_Music.close();
-    Spotify_KuGou.close();
+    Net_Music->close();
+    Spotify_KuGou->close();
+
+    delete Net_Music;
+    delete Spotify_KuGou;
+    delete Font;
     delete FunctionInterface;
     delete PlayerInterface;
     delete SearchInterface;

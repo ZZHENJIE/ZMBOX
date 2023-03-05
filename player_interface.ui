@@ -206,7 +206,7 @@ QSlider::groove:horizontal{
     </property>
    </widget>
   </widget>
-  <widget class="QLabel" name="Music_Name">
+  <widget class="QLabel" name="Music_Text">
    <property name="geometry">
     <rect>
      <x>130</x>

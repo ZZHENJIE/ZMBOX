@@ -24,8 +24,8 @@
    </property>
    <property name="font">
     <font>
-     <family>楷体</family>
-     <pointsize>20</pointsize>
+     <family>Microsoft YaHei UI</family>
+     <pointsize>9</pointsize>
     </font>
    </property>
    <property name="styleSheet">
@@ -46,6 +46,9 @@
      <width>60</width>
      <height>60</height>
     </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true"/>
    </property>
    <property name="text">
     <string/>
@@ -104,8 +107,8 @@
    </property>
    <property name="font">
     <font>
-     <family>楷体</family>
-     <pointsize>20</pointsize>
+     <family>Microsoft YaHei UI</family>
+     <pointsize>9</pointsize>
     </font>
    </property>
    <property name="styleSheet">

@@ -88,7 +88,7 @@
    </property>
    <property name="icon">
     <iconset resource="Res.qrc">
-     <normaloff>:/Resource/Like.png</normaloff>:/Resource/Like.png</iconset>
+     <normaloff>:/Resource/Like_List.png</normaloff>:/Resource/Like_List.png</iconset>
    </property>
    <property name="iconSize">
     <size>

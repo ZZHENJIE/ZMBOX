@@ -10,7 +10,18 @@ Player_Interface::Player_Interface(QWidget *parent) :
     this->show();
 }
 
-void Player_Interface::UI_Init(QString Color_Info)
+void Player_Interface::Play_Select_Song(Song_Info Data,short SerialNumber)
+{
+    QMediaPlayer * player = new QMediaPlayer;
+    QAudioOutput * audioOutput = new QAudioOutput;
+    player->setAudioOutput(audioOutput);
+    //connect(player, SIGNAL(positionChanged(qint64)), this, SLOT(positionChanged(qint64)));
+    player->setSource(NetMusic::GetMusicUrl(Data.Id));
+    audioOutput->setVolume(50);
+    player->play();
+}
+
+void Player_Interface::UI_Init(QFont Font,QString Color_Info)
 {
     ui->Music_Image->setToolTip("歌词");
     ui->Back->setToolTip("上一首");
@@ -23,6 +34,8 @@ void Player_Interface::UI_Init(QString Color_Info)
     ui->Next->setStyleSheet("background-color: rgba(" + Color_Info + ");border-radius: 5px;");
     ui->Play->setStyleSheet("background-color: rgba(" + Color_Info + ");border-radius: 5px;");
     ui->Audio_Show->setStyleSheet("background-color: rgba(" + Color_Info + ");border-radius: 5px;");
+
+    ui->Music_Text->setFont(Font);
 }
 
 Player_Interface::~Player_Interface()

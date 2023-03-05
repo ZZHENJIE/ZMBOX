@@ -1,9 +1,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QtWidgets/QMainWindow>
-#include <QtWidgets/QFileDialog>
-#include <QProcess>
+#include "other.h"
 #include "function_interface.h"
 #include "player_interface.h"
 #include "search_interface.h"
@@ -37,8 +35,10 @@ Q_SIGNALS:
 private:
     Ui::MainWindow *ui;
 
-    QProcess Net_Music;
-    QProcess Spotify_KuGou;
+    QProcess * Net_Music;
+    QProcess * Spotify_KuGou;
+
+    QFont * Font;
 
     Function_Interface *FunctionInterface;
     Player_Interface *PlayerInterface;

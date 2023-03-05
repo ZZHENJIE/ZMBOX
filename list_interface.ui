@@ -13,17 +13,7 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <widget class="QListWidget" name="List">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>1180</width>
-     <height>510</height>
-    </rect>
-   </property>
-  </widget>
-  <widget class="QListWidget" name="Song_List">
+  <widget class="QListWidget" name="Song_List_List">
    <property name="geometry">
     <rect>
      <x>0</x>
@@ -42,7 +32,90 @@
     <number>35</number>
    </property>
   </widget>
+  <widget class="QWidget" name="Song_List_Widget" native="true">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1180</width>
+     <height>510</height>
+    </rect>
+   </property>
+   <widget class="QListWidget" name="Song_List">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>1180</width>
+      <height>470</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true"/>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="Back">
+    <property name="geometry">
+     <rect>
+      <x>5</x>
+      <y>470</y>
+      <width>50</width>
+      <height>40</height>
+     </rect>
+    </property>
+    <property name="toolTip">
+     <string>上一页</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="icon">
+     <iconset resource="Res.qrc">
+      <normaloff>:/Resource/Back_Page.png</normaloff>:/Resource/Back_Page.png</iconset>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>35</width>
+      <height>35</height>
+     </size>
+    </property>
+    <property name="flat">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="Next">
+    <property name="geometry">
+     <rect>
+      <x>1125</x>
+      <y>470</y>
+      <width>50</width>
+      <height>40</height>
+     </rect>
+    </property>
+    <property name="toolTip">
+     <string>下一页</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="icon">
+     <iconset resource="Res.qrc">
+      <normaloff>:/Resource/Next_Page.png</normaloff>:/Resource/Next_Page.png</iconset>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>35</width>
+      <height>35</height>
+     </size>
+    </property>
+    <property name="flat">
+     <bool>true</bool>
+    </property>
+   </widget>
+  </widget>
  </widget>
- <resources/>
+ <resources>
+  <include location="Res.qrc"/>
+ </resources>
  <connections/>
 </ui>
