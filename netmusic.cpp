@@ -76,4 +76,67 @@ QString NetMusic::GetMusicUrl(QString ID)
     }
 }
 
+QString NetMusic::GetMusicImage(QString ID)
+{
+    QJsonDocument Json_Doc = QJsonDocument::fromJson(Other::GetUrlData("http://127.0.0.1:8385/song/detail?ids=" + ID));
+
+    QJsonObject Json_Data = Json_Doc.object();
+
+    return Json_Data.value("songs").toArray().at(0).toObject().value("al").toObject().value("picUrl").toString() + "?param=256y256";
+}
+
+QList<Lyrics_Data> NetMusic::GetMusicLyrics(QString ID)
+{
+    QList<Lyrics_Data> List;
+    
+    QJsonDocument Json_Doc = QJsonDocument::fromJson(Other::GetUrlData("http://127.0.0.1:8385/lyric?id=" + ID));
+
+    QTextStream Lyric (Json_Doc.object().value("lrc").toObject().value("lyric").toString().toUtf8());
+
+    short Min,Ten_Sec,Sec = 0;
+
+    while(true)
+    {
+        QString Data = Lyric.readLine();
+
+        if(Data.isEmpty() != true)
+        {
+            Lyrics_Data Add;
+
+            Add.Data = Data.mid(Data.lastIndexOf("]")+1);
+
+            QString Time = Data.mid(Data.lastIndexOf("[")+1,Data.lastIndexOf("]")-1);
+
+            Min = Time.split(":").at(0).toInt();
+
+            Ten_Sec = Time.split(":").at(1).split(".").at(0).toInt();
+
+            Sec = Time.split(":").at(1).split(".").at(1).toInt();
+
+            if(Data.lastIndexOf("]") == 9)
+            {
+                Sec *= 10;
+            }
+
+            Add.Time = (Min * 60000) + (Ten_Sec * 1000) + Sec;
+            
+            List.append(Add);
+        }
+        else
+        {
+            break;
+        }
+    }
+
+    return List;
+}
+
+void NetMusic::GetMusicData(Player_Music_Info * Data,QString ID)
+{
+    Data->Image = Other::UrlToPixmap(GetMusicImage(ID));
+
+    Data->Music = GetMusicUrl(ID);
+
+    Data->Lyrics = GetMusicLyrics(ID);
+}
 

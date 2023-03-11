@@ -28,7 +28,11 @@ public:
 
     void Clear_Item();
 
+    void UpdataMusic();
+
 public Q_SLOTS:
+
+    void Lyrics_Select_Change(short SerialNumber);
 
     void Next_Offset();
 
@@ -38,13 +42,19 @@ public Q_SLOTS:
 
     void Like_List_Show();
 
+    void Lyrics_Interface_Show();
+
     void Search(QString KeyWord,int MusicPlatform,int Offset = 1);
 
     void GetTheRecommendedPlaylist(int MusicPlatform = 0);
 
+    void Next_Music();
+
+    void Back_Music();
+
 Q_SIGNALS:
 
-    void Play_Select_Song(Song_Info Data,short SerialNumber);
+    void Play_Select_Song(Player_Music_Info Data);
 
     void Clear_Item_Signals();
 

@@ -12,7 +12,93 @@ List_Interface::List_Interface(QWidget *parent) :
     Back();
     Read_List();
 
-    //GetTheRecommendedPlaylist();
+    GetTheRecommendedPlaylist();
+}
+
+void List_Interface::Lyrics_Interface_Show()
+{
+    ui->Lyrics->setVisible(true);
+    ui->Song_List_List->setVisible(false);
+    ui->Song_List_Widget->setVisible(false);
+}
+
+void List_Interface::Lyrics_Select_Change(short SerialNumber)
+{
+    ui->Lyrics_List->setCurrentRow(SerialNumber);
+}
+
+void List_Interface::UpdataMusic()
+{
+    Player_Music_Info Data;
+
+    ui->Lyrics_List->clear();
+
+    Data.Song_Singer_Name = Play_List.at(Play_SerialNumber).Song_Name + "   " + Play_List.at(Play_SerialNumber).Singer_Name;
+
+    switch(Play_List.at(Play_SerialNumber).MusicPlatform)
+    {
+        case 0:
+        {
+            NetMusic::GetMusicData(&Data,Play_List.at(Play_SerialNumber).Id);
+            break;
+        }
+        case 1:
+        {
+            break;
+        }
+        case 2:
+        {
+            break;
+        }
+        case 3:
+        {
+            break;
+        }
+    }
+
+    for(int i = 0; i < Data.Lyrics.count(); i ++)
+    {
+        QListWidgetItem *Item = new QListWidgetItem; 
+        Item->setSizeHint(QSize(774,40));//设置每行宽高
+        Item->setTextAlignment(Qt::AlignCenter);//设置文本居中
+        Item->setText(Data.Lyrics.at(i).Data);//设置文本
+        ui->Lyrics_List->addItem(Item);
+    }
+
+    if(Data.Image.isNull() == true)
+    {
+        Data.Image.load(":/Resource/Logo.png");
+    }
+    
+    ui->Lyrics_Image->setIcon(QIcon(Data.Image));
+
+    emit Play_Select_Song(Data);
+}
+
+void List_Interface::Next_Music()
+{
+    if(Play_SerialNumber == Play_List.count() - 1)//判断是否为最后一首歌曲
+    {
+        Play_SerialNumber = 0;//是最后一首歌曲则播放第一首歌曲
+    }
+    else
+    {
+        Play_SerialNumber +=1;//下一首
+    }
+    UpdataMusic();//音乐改变
+}
+
+void List_Interface::Back_Music()
+{
+    if(Play_SerialNumber == 0)//判断是否为第一首歌曲
+    {
+        Play_SerialNumber = Play_List.count() - 1;//是第一首歌曲则播放最后一首歌曲
+    }
+    else
+    {
+        Play_SerialNumber -=1;//上一首
+    }
+    UpdataMusic();//音乐改变
 }
 
 List_Interface::~List_Interface()
@@ -128,6 +214,7 @@ void List_Interface::Back_Offset()
 void List_Interface::Play_List_Show()
 {
     ui->Song_List_List->setVisible(false);
+    ui->Lyrics->setVisible(false);
     ui->Song_List_Widget->setVisible(true);
     Clear_Item();
 
@@ -157,7 +244,7 @@ void List_Interface::Play_List_Show()
         });
         connect(MListItem,&MListWidgetItem::Play_Select_Song,[=](short SerialNumber){
             Play_SerialNumber = SerialNumber;
-            emit Play_Select_Song(Play_List.at(Play_SerialNumber),Play_SerialNumber);
+            UpdataMusic();
         });
 
         switch(Play_List.at(i).MusicPlatform)
@@ -189,6 +276,7 @@ void List_Interface::Play_List_Show()
 void List_Interface::Like_List_Show()
 {
     ui->Song_List_List->setVisible(false);
+    ui->Lyrics->setVisible(false);
     ui->Song_List_Widget->setVisible(true);
     Clear_Item();
 
@@ -225,7 +313,7 @@ void List_Interface::Like_List_Show()
                 {
                     Play_SerialNumber = i;
                     Is_Have = true;
-                    emit Play_Select_Song(Play_List.at(i),i);
+                    UpdataMusic();
                     break;
                 }
             }
@@ -233,10 +321,8 @@ void List_Interface::Like_List_Show()
             if(Is_Have == false)
             {
                 Play_List.append(Like_List.at(SerialNumber));
-
                 Play_SerialNumber = Play_List.count() - 1;
-
-                emit Play_Select_Song(Play_List.at(Play_SerialNumber),Play_SerialNumber);
+                UpdataMusic();
             }
         });
 
@@ -426,6 +512,7 @@ void List_Interface::Save_List()
 void List_Interface::Back()
 {
     ui->Song_List_List->setVisible(true);
+    ui->Lyrics->setVisible(false);
     ui->Song_List_Widget->setVisible(false);
     Clear_Item();
 }
@@ -434,6 +521,8 @@ void List_Interface::UI_Init(QFont Font,QString Color_Info)
 {
     ui->Song_List->setStyleSheet("background-color: rgba(" + Color_Info + ");border-radius: 10px;");
     ui->Song_List_List->setStyleSheet("background-color: rgba(" + Color_Info + ");border-radius: 10px;");
+    ui->Lyrics_List->setStyleSheet("background-color: rgba(" + Color_Info + ");border-radius: 10px;");
+    ui->Lyrics_Image->setStyleSheet("background-color: rgba(" + Color_Info + ");border-radius: 10px;");
 
     ui->Song_List_List->setIconSize(QSize(165,165));
     ui->Song_List_List->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -442,6 +531,10 @@ void List_Interface::UI_Init(QFont Font,QString Color_Info)
     ui->Song_List->setIconSize(QSize(55,55));
     ui->Song_List->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     ui->Song_List->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+
+    ui->Lyrics_List->setFont(Font);
+    ui->Lyrics_List->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    ui->Lyrics_List->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
     connect(ui->Next,&QPushButton::clicked,this,&List_Interface::Next_Offset);
     connect(ui->Back,&QPushButton::clicked,this,&List_Interface::Back_Offset);
@@ -452,6 +545,7 @@ void List_Interface::UI_Init(QFont Font,QString Color_Info)
 void List_Interface::Search(QString KeyWord,int MusicPlatform,int Offset)
 {
     ui->Song_List_List->setVisible(false);
+    ui->Lyrics->setVisible(false);
     ui->Song_List_Widget->setVisible(true);
 
     Clear_Item();

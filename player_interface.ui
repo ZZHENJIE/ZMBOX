@@ -234,10 +234,10 @@ QSlider::groove:horizontal{
   <widget class="QLabel" name="Music_Time">
    <property name="geometry">
     <rect>
-     <x>350</x>
-     <y>0</y>
-     <width>120</width>
-     <height>30</height>
+     <x>420</x>
+     <y>10</y>
+     <width>50</width>
+     <height>20</height>
     </rect>
    </property>
    <property name="font">
@@ -251,6 +251,9 @@ QSlider::groove:horizontal{
    </property>
    <property name="text">
     <string/>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
    </property>
   </widget>
   <widget class="QPushButton" name="Music_Image">

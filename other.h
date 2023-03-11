@@ -7,6 +7,7 @@
 #include <QMessageBox>
 #include <QPushButton>
 #include <QLabel>
+#include <QSlider>
 
 #include <QPixmap>
 #include <QListWidgetItem>
@@ -28,9 +29,24 @@
 #include <QDir>
 #include <QMediaPlayer>
 #include <QAudioOutput>
+#include <QTimer>
 
 #include <QProcess>
 #include <QDesktopServices>
+
+typedef struct LYRICE_DATA
+{
+    qint64 Time;
+    QString Data;
+}Lyrics_Data;
+
+typedef struct PLAYER_MUSIC_INFO
+{
+    QList <LYRICE_DATA> Lyrics;
+    QPixmap Image;
+    QString Music;
+    QString Song_Singer_Name;
+}Player_Music_Info;
 
 typedef struct SONG_INFO
 {
@@ -59,6 +75,8 @@ public:
     static QByteArray GetUrlData(QString Url);
 
     static QPixmap UrlToPixmap(QString Url);
+
+    static QString MsToSec(qint64 Ms);
 };
 
 #endif // OTHER_H

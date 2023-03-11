@@ -52,6 +52,10 @@ MainWindow::MainWindow(QWidget *parent)
         Net_Music->close();
         Net_Music->start(".\\API\\网易云音乐API.exe");
     });
+    connect(PlayerInterface,&Player_Interface::Back_Music,ListInterface,&List_Interface::Back_Music);
+    connect(PlayerInterface,&Player_Interface::Next_Music,ListInterface,&List_Interface::Next_Music);
+    connect(PlayerInterface,&Player_Interface::Lyrics_Interface_Show,ListInterface,&List_Interface::Lyrics_Interface_Show);
+    connect(PlayerInterface,&Player_Interface::Lyrics_Select_Change,ListInterface,&List_Interface::Lyrics_Select_Change);
 }
 
 void MainWindow::Search(QString KeyWord,int MusicPlatform)

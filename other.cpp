@@ -23,3 +23,14 @@ QPixmap Other::UrlToPixmap(QString Url)
 
     return Ret;
 }
+
+QString Other::MsToSec(qint64 Ms)
+{
+    short Min = Ms/60000;
+
+    short Ten_Sec = (Ms - Min * 60000) / 10000;
+
+    short Sec = (Ms - (Min * 60000 + Ten_Sec * 10000)) / 1000;
+
+    return QString::number(Min) + ":" + QString::number(Ten_Sec) + QString::number(Sec);
+}
