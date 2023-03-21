@@ -19,7 +19,7 @@ QPixmap Other::UrlToPixmap(QString Url)
 {
     QPixmap Ret;
 
-    Ret.loadFromData(Other::GetUrlData(Url),"jpg");
+    Ret.loadFromData(Other::GetUrlData(Url));
 
     return Ret;
 }
