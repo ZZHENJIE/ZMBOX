@@ -30,8 +30,6 @@
     
     **此API需要自己申请自己写JS**
 
-    [可以参考我写的(很垃圾的JS代码)](https://zzhenjie.github.io/Spotify-API-Document/#/)
-
     * 需要申请
         > **官方API:** `https://developer.spotify.com`
 
